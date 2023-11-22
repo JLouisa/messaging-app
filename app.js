@@ -7,6 +7,8 @@ const expressLayouts = require("express-ejs-layouts");
 
 const indexRouter = require("./server/routes/index");
 const usersRouter = require("./server/routes/users");
+const messageRouter = require("./server/routes/message");
+const groupRouter = require("./server/routes/group");
 
 const app = express();
 
@@ -24,6 +26,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/message", messageRouter);
+app.use("/group", groupRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -38,7 +42,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("pages/error");
+  res.render("pages/error", { layout: false });
 });
 
 module.exports = app;
