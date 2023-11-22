@@ -2,12 +2,7 @@
 console.log("This script populates some test player and character to my database.");
 
 const { creator } = require("../config/creator");
-
-const UserCollection = require("../models/server/model/userModel");
-const GroupCollection = require("../models/server/model/groupModel");
-const GroupMessageCollection = require("../models/server/model/groupMessageModel");
-const MessageCollection = require("../models/server/model/messageModel");
-const FriendlistCollection = require("../models/server/model/friendlistModel");
+const { useUser, useGroup, useMessage, useGroupMessage, useFriendlist } = creator();
 
 const dotenv = require("dotenv").config();
 
@@ -32,19 +27,18 @@ async function main() {
   console.log("Debug: Should be connected?");
   await popUser();
   await popGroup();
-  await popGroupMessage();
   await popMessage();
+  await popGroupMessage();
   await popFriendlist();
   console.log("Debug: Closing mongoose");
   mongoose.connection.close();
 }
 
-//! Users
+//! Users - 1
 // Create player function
 async function userCreate(index, username, password) {
-  const { useUser } = creator();
   try {
-    const playerN = useUser(username, password);
+    const playerN = await useUser(username, password);
     await playerN.save();
     userArr[index] = playerN;
     console.log(`Added player: ${playerN.username}`);
@@ -71,64 +65,123 @@ async function popUser() {
   ]);
 }
 
-//! Character
+//! Group - 2
 // Create character function
-async function characterCreate(index, character, posX, posY, map) {
-  const characterN = new CharacterCollection({ character, posX, posY, map });
-  await characterN.save();
-  characterArr[index] = characterN;
-  console.log(`Added character: ${characterN.character}`);
+async function groupCreate(index, name, createdByUser, members) {
+  try {
+    const characterN = await useGroup(name, createdByUser, members);
+    await characterN.save();
+    groupArr[index] = characterN;
+    console.log(`Added group: ${characterN.name}`);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 // Populate the locations
-async function popCharacter() {
-  console.log("Adding Character");
+async function popGroup() {
+  let i = 0;
+  console.log("Adding Group");
   await Promise.all([
-    //Rick and Morty
-    characterCreate(0, "Beth Smith", [77, 81], [30, 50], "rickMortyMap"),
-    characterCreate(1, "Jerry Smith", [57, 62], [4, 30], "rickMortyMap"),
-    characterCreate(2, "Summer Smith", [67, 72], [72, 94], "rickMortyMap"),
-    characterCreate(3, "Pencil", [39, 41], [26, 38], "rickMortyMap"),
-    characterCreate(4, "Ham Samurai", [52, 57], [-2, 23], "rickMortyMap"),
-    characterCreate(5, "Flamingo", [75, 79], [1, 12], "rickMortyMap"),
-    characterCreate(6, "FrankenSteinMonster", [10, 20], [18, 40], "rickMortyMap"),
-    //Disney
-    characterCreate(7, "Homer Simpson", [20, 24], [22, 28], "disneyMap"),
-    characterCreate(8, "Simba", [90, 96], [26, 32], "disneyMap"),
-    characterCreate(9, "Caption America", [82, 87], [55, 64], "disneyMap"),
-    characterCreate(10, "Kermit", [64, 71], [83, 88], "disneyMap"),
-    characterCreate(11, "Baby Yoda", [42, 47], [76, 79], "disneyMap"),
-    characterCreate(12, "Goofy", [12, 17], [34, 37], "disneyMap"),
-    //Pokemon
-    characterCreate(13, "Blastoise", [22, 31], [29, 32], "pokemonMap"),
-    characterCreate(14, "Pidgey", [-1, 3], [88, 91], "pokemonMap"),
-    characterCreate(15, "Snorlax", [10, 17], [51, 55], "pokemonMap"),
-    characterCreate(16, "Charmander", [46, 50], [93, 96], "pokemonMap"),
-    characterCreate(17, "Mew", [29, 37], [40, 44], "pokemonMap"),
-    characterCreate(18, "Weedle", [66, 70], [73, 76], "pokemonMap"),
-    characterCreate(19, "Starmie", [65, 71], [44, 46], "pokemonMap"),
-    characterCreate(20, "Pichu", [84, 88], [51, 54], "pokemonMap"),
-    characterCreate(21, "Goldeen", [5, 9], [62, 64], "pokemonMap"),
-    characterCreate(22, "Magneton", [53, 59], [3, 7], "pokemonMap"),
-    //Disney
-    characterCreate(23, "Dark Vader", [25, 30], [75, 84], "disneyMap"),
-    characterCreate(24, "Moana", [34, 38], [52, 59], "disneyMap"),
-    characterCreate(25, "Phineas Flynn", [45, 50], [12, 15], "disneyMap"),
-    characterCreate(26, "Thanos", [89, 96], [46, 59], "disneyMap"),
-    //Rick and Morty
-    characterCreate(27, "Ballon Dog", [17, 25], [60, 74], "rickMortyMap"),
-    characterCreate(28, "Rick", [40, 48], [51, 83], "rickMortyMap"),
-    characterCreate(29, "Morty", [48, 54], [28, 51], "rickMortyMap"),
-    characterCreate(30, "Mrs. Refrigerator", [15, 28], [72, 95], "rickMortyMap"),
-    // characterCreate(31, "Movie nights are the best nights.", player[7], character[5], false),
-    // characterCreate(32, "Sounds like a great time with friends.", player[9], character[5], false),
-    // characterCreate(33, "Hiking in the mountains sounds amazing!", player[0], character[6], false),
-    // characterCreate(34, "The views must have been breathtaking.", player[2], character[6], false),
-    // characterCreate(35, "Nature has a way of soothing the soul.", player[4], character[6], false),
-    // characterCreate(36, "Did you spot any wildlife?", player[6], character[6], false),
-    // characterCreate(37, "A day in the mountains is a day well spent.", player[8], character[6], false),
-    // characterCreate(38, "Meeting Max must have been a joy!", player[1], character[7], false),
-    // characterCreate(39, "Puppies bring so much happiness.", player[3], character[7], false),
-    // characterCreate(40, "What breed is Max?", player[5], character[7], false),
+    groupCreate(0, `Group${i++}`, userArr[0], [userArr[0], userArr[1], userArr[2]]),
+    groupCreate(1, `Group${i++}`, userArr[1], [userArr[1], userArr[3], userArr[4], userArr[5]]),
+    groupCreate(2, `Group${i++}`, userArr[2], [userArr[2], userArr[7], userArr[8]]),
+    groupCreate(3, `Group${i++}`, userArr[3], [userArr[3], userArr[9], userArr[10], userArr[1]]),
+    groupCreate(4, `Group${i++}`, userArr[4], [userArr[4], userArr[1], userArr[7]]),
+    groupCreate(5, `Group${i++}`, userArr[5], [userArr[5], userArr[3], userArr[0]]),
+  ]);
+}
+
+//! Message - 3
+// Create character function
+async function messageCreate(index, text, createdByUser, userReceiver) {
+  const characterN = await useMessage(text, createdByUser, userReceiver);
+  try {
+    await characterN.save();
+    messageArr[index] = characterN;
+    console.log(`Added message: ${messageArr[index]}`);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// Populate the locations
+async function popMessage() {
+  let i = 0;
+  console.log("Adding message");
+  await Promise.all([
+    messageCreate(0, "The sun sets behind the mountains, casting a warm glow.", userArr[0], userArr[1]),
+    messageCreate(1, "A playful dog chases its tail in the green meadow.", userArr[1], userArr[2]),
+    messageCreate(2, "Waves gently kiss the sandy shore under the moonlight.", userArr[2], userArr[3]),
+    messageCreate(3, "Laughter echoes through the air, creating a joyful atmosphere.", userArr[3], userArr[4]),
+    messageCreate(4, "Leaves rustle in the breeze, creating a soothing melody.", userArr[4], userArr[5]),
+    messageCreate(5, "A cozy blanket of snow covers the landscape in winter's embrace.", userArr[5], userArr[6]),
+  ]);
+}
+
+//! GroupMessage - 4
+// Create character function
+async function GroupMessageCreate(index, text, createdByUser, userReceiver) {
+  const characterN = await useGroupMessage(text, createdByUser, userReceiver);
+  try {
+    await characterN.save();
+    groupMessageArr[index] = characterN;
+    console.log(`Added message: ${groupMessageArr[index]}`);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// Populate the locations
+async function popGroupMessage() {
+  console.log("Adding message");
+  await Promise.all([
+    GroupMessageCreate(0, "The sun sets behind the mountains, casting a warm glow.", userArr[0], groupArr[0]),
+    GroupMessageCreate(1, "A playful dog chases its tail in the green meadow.", userArr[1], groupArr[1]),
+    GroupMessageCreate(2, "Waves gently kiss the sandy shore under the moonlight.", userArr[2], groupArr[2]),
+    GroupMessageCreate(3, "Laughter echoes through the air, creating a joyful atmosphere.", userArr[3], groupArr[3]),
+    GroupMessageCreate(4, "Leaves rustle in the breeze, creating a soothing melody.", userArr[4], groupArr[4]),
+    GroupMessageCreate(5, "A cozy blanket of snow covers the landscape in winter's embrace.", userArr[5], groupArr[5]),
+  ]);
+}
+
+//! GroupMessage - 5
+// Create character function
+async function friendlistCreate(index, createdByUser, friends, groups) {
+  const characterN = await useFriendlist(createdByUser, friends, groups);
+  try {
+    await characterN.save();
+    friendlistArr[index] = characterN;
+    console.log(`Added friendlist: ${friendlistArr[index]}`);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// Populate the locations
+async function popFriendlist() {
+  console.log("Adding friendlist");
+  await Promise.all([
+    friendlistCreate(0, userArr[0], [userArr[1], userArr[2], userArr[3], userArr[10]], [groupArr[0]]),
+
+    friendlistCreate(1, userArr[1], [userArr[0], userArr[3], userArr[4], userArr[7]], [groupArr[1]]),
+
+    friendlistCreate(2, userArr[2], [userArr[0], userArr[4], userArr[5], userArr[8], userArr[9]], [groupArr[2]]),
+
+    friendlistCreate(3, userArr[3], [userArr[0], userArr[1], userArr[6], userArr[9]], [groupArr[3]]),
+
+    friendlistCreate(4, userArr[4], [userArr[1], userArr[4], userArr[7]], [groupArr[4]]),
+
+    friendlistCreate(5, userArr[5], [userArr[2], userArr[7], userArr[8]], [groupArr[5]]),
+
+    friendlistCreate(6, userArr[6], [userArr[3], userArr[8], userArr[9]], []),
+
+    friendlistCreate(7, userArr[7], [userArr[4], userArr[5], userArr[1], userArr[10]], []),
+
+    friendlistCreate(8, userArr[8], [userArr[5], userArr[6], userArr[2], userArr[10]], []),
+
+    friendlistCreate(9, userArr[9], [userArr[6], userArr[2], userArr[3]], [groupArr[2]]),
+
+    friendlistCreate(10, userArr[10], [userArr[0], userArr[7], userArr[8]], [groupArr[3]]),
   ]);
 }

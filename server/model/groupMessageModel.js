@@ -5,7 +5,7 @@ const { DateTime } = require("luxon");
 const GroupMessageSchema = new Schema({
   text: { type: String, required: true },
   createdByUser: { type: Schema.Types.ObjectId, ref: "User", required: [true, "User is required."] },
-  members: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  group: [{ type: Schema.Types.ObjectId, ref: "Group" }],
   isHidden: { type: Boolean, default: false },
   createdDate: { type: Date, default: Date.now },
 });

@@ -42,9 +42,9 @@ const creator = () => {
     return message;
   };
 
-  const useGroupMessage = (text, createdByUser, members, isHidden = false) => {
+  const useGroupMessage = (text, createdByUser, group, isHidden = false) => {
     // Create a new group message instance
-    const groupMessage = GroupMessageCollection({ text, createdByUser, members, isHidden });
+    const groupMessage = GroupMessageCollection({ text, createdByUser, group, isHidden });
 
     return groupMessage;
   };
