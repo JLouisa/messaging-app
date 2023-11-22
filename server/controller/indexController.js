@@ -31,9 +31,73 @@ exports.signupGet = asyncHandler(async function (req, res, next) {
   res.send("Sign UP GET");
 });
 
-exports.signupPost = asyncHandler(async function (req, res, next) {
-  res.send("Sign UP POST");
-});
+exports.signupPost = [
+  // Validate and sanitize the name field.
+  body("username")
+    .notEmpty()
+    .withMessage("Username must not be empty")
+    .trim()
+    .isLength({ min: 5, max: 50 })
+    .withMessage("Username must be between 5 and 50 characters")
+    .matches(/^[a-zA-Z0-9_]*$/)
+    .withMessage("Username can only contain letters, numbers, and underscores")
+    .custom(async (value) => {
+      try {
+        // Check if the username is in the database
+        const user = await UserCollection.findOne({ username: value.toLowerCase() });
+
+        if (user) {
+          throw new Error("Username is already taken.");
+        }
+      } catch (error) {
+        // Handle the error gracefully
+        if (error.message === "Username is already taken.") {
+          // Specific error for duplicate username
+          throw new Error("Username is already taken. Please choose a different one.");
+        } else {
+          // Handle other errors, log them, or rethrow if needed
+          console.error("Error checking username:", error);
+          throw new Error("An unexpected error occurred. Please try again later.");
+        }
+      }
+    })
+    .withMessage("Username is unavailable. Please try again")
+    .escape(),
+  body("ConfirmPassword")
+    .custom((value, { req }) => {
+      return value === req.body.password;
+    })
+    .withMessage("Passwords doesn't match"),
+  body("password")
+    .notEmpty()
+    .withMessage("Password must not be empty")
+    .trim()
+    .matches(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{3,20}$/)
+    .withMessage(
+      "Password must include at least one letter, one digit, one special character, and be between 3 and 20 characters"
+    )
+    .escape(),
+
+  // Process request after validation and sanitization.
+  asyncHandler(async function (req, res, next) {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values/error messages.
+      res.status(400).json({
+        data: {
+          username: req.body.username,
+          errors: errors.array(),
+        },
+      });
+      return;
+    } else {
+      createUser(req.body.username, req.body.password, false, false).catch((err) => console.error(err));
+      res.status(201).json({ message: "User succesfully created" });
+    }
+  }),
+];
 
 exports.logoutPost = asyncHandler(async function (req, res, next) {
   res.send("logout POST");

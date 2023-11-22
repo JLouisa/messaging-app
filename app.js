@@ -4,6 +4,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const expressLayouts = require("express-ejs-layouts");
+const { connectToDatabase } = require("./config/mongDB");
 
 const indexRouter = require("./server/routes/index");
 const usersRouter = require("./server/routes/users");
@@ -11,6 +12,9 @@ const messageRouter = require("./server/routes/message");
 const groupRouter = require("./server/routes/group");
 
 const app = express();
+
+// Init Database
+connectToDatabase();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

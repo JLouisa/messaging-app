@@ -4,10 +4,10 @@ const { DateTime } = require("luxon");
 
 const MessageSchema = new Schema({
   text: { type: String, required: true },
-  createdDate: { type: Date, default: Date.now },
   createdByUser: { type: Schema.Types.ObjectId, ref: "User", required: [true, "User is required."] },
   userReceiver: { type: Schema.Types.ObjectId, ref: "User", required: [true, "User is required."] },
   isHidden: { type: Boolean, default: false },
+  createdDate: { type: Date, default: Date.now },
 });
 
 // Virtual for message's URL

@@ -14,6 +14,16 @@ router.put("/:id", userController.usersPut);
 /* DELETE user */
 router.delete("/:id", userController.usersDelete);
 
+//Friendlist
+/* POST user */
+router.post("/friendlist/:id", userController.usersFriendlistPost);
+
+/* PUT user */
+router.post("/friendlist/:id", userController.usersFriendlistPut);
+
+/* DELETE user */
+router.delete("/friendlist/:id", userController.usersFriendlistDelete);
+
 // /* GET user login page */
 // router.get("/login", userController.loginGet);
 

@@ -5,9 +5,9 @@ const { DateTime } = require("luxon");
 const UserSchema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  createdDate: { type: Date, default: Date.now },
   isAdmin: { type: Boolean, default: false },
   isSuspended: { type: Boolean, default: false },
+  createdDate: { type: Date, default: Date.now },
 });
 
 // Virtual for user's URL

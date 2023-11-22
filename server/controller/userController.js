@@ -21,6 +21,18 @@ exports.usersDelete = asyncHandler(async function (req, res, next) {
   res.send("User DELETE");
 });
 
+exports.usersFriendlistPost = asyncHandler(async function (req, res, next) {
+  res.send("User friendlist POST");
+});
+
+exports.usersFriendlistPut = asyncHandler(async function (req, res, next) {
+  res.send("User friendlist PUT");
+});
+
+exports.usersFriendlistDelete = asyncHandler(async function (req, res, next) {
+  res.send("User friendlist POST");
+});
+
 // exports.loginPost = asyncHandler(async function (req, res, next) {
 //   body("userName")
 //     .notEmpty()

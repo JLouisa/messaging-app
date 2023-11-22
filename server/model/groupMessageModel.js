@@ -4,10 +4,10 @@ const { DateTime } = require("luxon");
 
 const GroupMessageSchema = new Schema({
   text: { type: String, required: true },
-  createdDate: { type: Date, default: Date.now },
   createdByUser: { type: Schema.Types.ObjectId, ref: "User", required: [true, "User is required."] },
   members: [{ type: Schema.Types.ObjectId, ref: "User" }],
   isHidden: { type: Boolean, default: false },
+  createdDate: { type: Date, default: Date.now },
 });
 
 // Virtual for group's URL
