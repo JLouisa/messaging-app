@@ -3,34 +3,69 @@ const { body, validationResult } = require("express-validator");
 const UserCollection = require("../model/userModel");
 const bcrypt = require("bcryptjs");
 const fs = require("fs");
+const { creator } = require("../../config/creator");
+const jwt = require("jsonwebtoken");
 // const reservedUsernames = JSON.parse(fs.readFileSync(__dirname + "/reservedUsernames.json", "utf8")).reservedUsernames;
 
+//! Home page
 exports.homeGet = asyncHandler(async function (req, res, next) {
-  res.send("Home GET");
+  res.render("pages/login", { title: "Welcome" });
 });
 
+//! Home page
+exports.home = asyncHandler(async function (req, res, next) {
+  res.render("pages/home", { title: "Hompage" });
+});
+
+//! Home page
 exports.loginGet = asyncHandler(async function (req, res, next) {
-  res.send("login GET");
+  res.render("pages/login", { title: "Welcome" });
 });
 
-exports.loginPost = asyncHandler(async function (req, res, next) {
-  //   body("username")
-  //     .notEmpty()
-  //     .withMessage("Username must not be empty")
-  //     .trim()
-  //     .isLength({ min: 5, max: 50 })
-  //     .withMessage("Username must be between 5 and 50 characters")
-  //     .matches(/^[a-zA-Z0-9_]*$/)
-  //     .withMessage("Username can only contain letters, numbers, and underscores")
-  //     .escape();
-  //   body("password").notEmpty().withMessage("Password must not be empty").trim().escape();
-  res.send("login POST");
-});
+//! Home page
+exports.loginPost = [
+  body("username")
+    .notEmpty()
+    .withMessage("Username must not be empty")
+    .trim()
+    .isLength({ min: 5, max: 50 })
+    .withMessage("Username must be between 5 and 50 characters")
+    .matches(/^[a-zA-Z0-9_]*$/)
+    .withMessage("Username can only contain letters, numbers, and underscores")
+    .escape(),
+  body("password").notEmpty().withMessage("Password must not be empty").trim().escape(),
 
+  asyncHandler(async function (req, res, next) {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values/error messages.
+      res.status(400).json({
+        data: {
+          username: req.body.username,
+          errors: errors.array(),
+        },
+      });
+      return;
+    } else {
+      // jwt.sign({ user: user }, process.env.SECRET_JWT_KEY, { algorithm: "RS256" }, (err, token) => {
+      //   console.log(token);
+      //   res.json({
+      //     token: token,
+      //   });
+      // });
+      res.send("logout POST");
+    }
+  }),
+];
+
+//! Home page
 exports.signupGet = asyncHandler(async function (req, res, next) {
-  res.send("Sign UP GET");
+  res.render("pages/signup", { title: "Sign-up Page" });
 });
 
+//! Validate Sign Up post
 exports.signupPost = [
   // Validate and sanitize the name field.
   body("username")
@@ -63,7 +98,7 @@ exports.signupPost = [
     })
     .withMessage("Username is unavailable. Please try again")
     .escape(),
-  body("ConfirmPassword")
+  body("confirmPassword")
     .custom((value, { req }) => {
       return value === req.body.password;
     })
@@ -93,12 +128,14 @@ exports.signupPost = [
       });
       return;
     } else {
-      createUser(req.body.username, req.body.password, false, false).catch((err) => console.error(err));
+      const { useUser } = creator();
+      (await useUser(req.body.username, req.body.password)).save().catch((err) => console.error(err));
       res.status(201).json({ message: "User succesfully created" });
     }
   }),
 ];
 
+//! Home page
 exports.logoutPost = asyncHandler(async function (req, res, next) {
   res.send("logout POST");
 });

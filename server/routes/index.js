@@ -6,6 +6,9 @@ const indexController = require("../controller/indexController");
 /* GET users listing. */
 router.get("/", indexController.homeGet);
 
+/* GET users listing. */
+router.get("/home", indexController.home);
+
 /* GET user login page */
 router.get("/login", indexController.loginGet);
 
@@ -21,30 +24,13 @@ router.post("/signup", indexController.signupPost);
 /* POST users logout. */
 router.post("/logout", indexController.logoutPost);
 
-// /* POST users logout. */
-// router.post("/logout", function (req, res, next) {
-//   res.render("pages/about", { head: "About", title: "About" });
-// });
+router.post("/clicked-ping", function (req, res, next) {
+  res.render("components/ping", { name: "Ping" });
+});
 
-// /* GET user login. */
-// router.get("/login", userController.login);
-
-// /* GET home page. */
-// router.get("/", function (req, res, next) {
-//   res.render("pages/index", { description: "Your description here", head: "Home", title: "Welcome" });
-// });
-
-// router.get("/about", function (req, res, next) {
-//   res.render("pages/about", { head: "About", title: "About" });
-// });
-
-// router.post("/clicked-ping", function (req, res, next) {
-//   res.render("components/ping", { name: "Ping", layout: false });
-// });
-
-// router.post("/clicked-pong", function (req, res, next) {
-//   res.render("components/pong", { name: "Pong", layout: false });
-// });
+router.post("/clicked-pong", function (req, res, next) {
+  res.render("components/pong", { name: "Pong" });
+});
 
 // router.post("/clicked-ping", function (req, res, next) {
 //   res.send(snippets.ping);

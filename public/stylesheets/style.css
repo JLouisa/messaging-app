@@ -1,8 +1,185 @@
+@import url("https://fonts.googleapis.com/css2?family=Alata&family=Poppins:wght@400;500;600;700&display=swap");
+
+:root {
+  /* Background colors for different elements */
+  --bgColor1: rgb(157, 200, 157); /* Light green background */
+  --bgColor2: #fef5ee; /* Creamy background */
+
+  /* Default font color for text */
+  --frameColor: #777;
+  --black: #1c1c1c;
+  --red: #b30000;
+  --greyLight: #e4e4e4;
+
+  /* Default font color for text */
+  --fontSizeBase: 1rem;
+  --fontSizeMD: clamp(1.25rem, 0.61vw + 1.1rem, 1.58rem);
+  --fontSizeLG: clamp(1.56rem, 1vw + 1.31rem, 2.11rem);
+  --fontSizeXL: clamp(2.44rem, 2.38vw + 1.85rem, 3.75rem);
+
+  /* Title size with a responsive approach */
+  --titleSize: clamp(1.2rem, 5vw, 3rem);
+
+  /* Default Border Radius */
+  --borderRadius: 10px;
+}
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  /* Define the default font family for the entire document */
+  /* font-family: "Alata", sans-serif; */
+  font-family: "Poppins", sans-serif;
+  color: var(--black);
+  font-size: var(--fontSizeBase);
+  /* background-image: url("../images/img-noise-361x370.png"); */
+  margin: 0;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="search"],
+textarea,
+select {
+  font-family: "Poppins", sans-serif;
+  font-size: var(--fontSizeBase);
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.7rem 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.btn {
+  background-color: var(--black);
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.btnDelete {
+  padding: 10px 16px;
+  background-color: var(--red);
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+/*! Layout */
+main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 10px;
+  min-height: 70vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+  font-size: var(--titleSize);
+  line-height: 1.2;
 }
 
 a {
-  color: #00b7ff;
+  text-decoration: none;
+  color: inherit;
+}
+
+header {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "logo login";
+  border-bottom: 2px solid var(--frameColor);
+  align-items: center;
+  padding: 1em;
+  gap: 1em;
+  justify-content: space-between;
+}
+
+.logo {
+  grid-area: "logo";
+  /* font-size: var(--titleSize); */
+  justify-self: start;
+}
+
+.logoPart2 {
+  color: darkgreen;
+}
+
+header > form {
+  grid-area: "search";
+}
+
+.searchDiv {
+  grid-area: "login";
+  justify-self: center;
+}
+
+.searchDiv {
+  display: none;
+}
+
+.searchImg {
+  width: 40px;
+  height: auto;
+}
+
+nav {
+  grid-area: "login";
+  justify-self: center;
+}
+
+.login {
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  text-decoration: none;
+  color: inherit;
+}
+
+.login:hover {
+  text-decoration: underline;
+}
+
+/* .bubbleImg {
+  max-height: 2em;
+  filter: drop-shadow(0px, 44px 34px, rgba(0, 0, 0, 0.25));
+  overflow: hidden;
+  border-radius: var(--borderRadius);
+} */
+
+@media only screen and (min-width: 480px) {
+  .searchDiv {
+    display: flex;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  header {
+    grid-template-areas: "logo search login";
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+footer {
+  border-top: 2px solid var(--frameColor);
+  padding: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+}
+
+footer img {
+  max-width: 3rem;
 }

@@ -3,7 +3,6 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const expressLayouts = require("express-ejs-layouts");
 const { connectToDatabase } = require("./config/mongDB");
 
 const indexRouter = require("./server/routes/index");
@@ -14,13 +13,11 @@ const groupRouter = require("./server/routes/group");
 const app = express();
 
 // Init Database
-connectToDatabase();
+// connectToDatabase();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
-app.use(expressLayouts);
-app.set("layout", "./layout/main");
-app.set("view engine", "ejs");
+app.set("view engine", "pug");
 
 app.use(logger("dev"));
 app.use(express.json());

@@ -1,0 +1,13 @@
+extends ../layout
+block content
+    section#loginSection
+        h1= title
+        //- div
+        //-     form(action="", method="POST")
+        //-         label(for="username") Username:
+        //-         input(type="text", name="username", placeholder="username", required)
+        //-         label(for="password") Password:
+        //-         input(type="password", name="password", placeholder="password", required)
+
+        div#parent-div
+            button.btn(hx-get="/home", hx-trigger="click", hx-target="#loginSection", hx-swap="outerHTML") Enter
