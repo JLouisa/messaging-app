@@ -7,8 +7,8 @@ const messageController = require("../controller/messageController");
 /* GET messages */
 router.get("/", messageController.messageGet);
 
-/* POST message */
-router.post("/", messageController.messagePost);
+// /* POST message */
+// router.post("/", messageController.messagePost);
 
 // Group Messages
 /* GET a message */
@@ -29,6 +29,9 @@ router.delete("/group/:id", messageController.groupMessageDelete);
 // Direct Messages
 /* GET a message */
 router.get("/:id", messageController.messageIDGet);
+
+/* POST a message */
+router.post("/:id", messageController.messagePost);
 
 /* GET users signup. */
 router.put("/:id", messageController.messagePut);

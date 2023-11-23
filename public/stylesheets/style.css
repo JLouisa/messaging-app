@@ -243,16 +243,39 @@ footer img {
 #chatSection {
   grid-area: "chat";
   display: grid;
-  grid-template-rows: 1fr 3rem;
+  grid-template-rows: 500px 3rem;
   grid-template-columns: 1fr;
   border: 1px solid red;
 }
 
 #chatMessages {
+  overflow-y: auto;
   border: 2px solid green;
   grid-row: 1/2;
   grid-column: 1/2;
   padding: var(--paddingBase);
+  /* grid-auto-flow: row dense; */
+  /* Hide the scrollbar when not in use */
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+/* Add styling for the scrollbar if needed */
+#chatMessages::-webkit-scrollbar {
+  width: 6px; /* Adjust the width as needed */
+}
+
+#chatMessages::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Set the thumb color */
+}
+
+#chatMessages::-webkit-scrollbar-track {
+  background-color: transparent; /* Set the track color */
+}
+
+.chatBubble {
+  padding: 0.5em;
+  border: 1px solid black;
+  margin-bottom: 0.2em;
 }
 
 .chatInputField {
