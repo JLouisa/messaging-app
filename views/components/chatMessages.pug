@@ -1,0 +1,9 @@
+div#chatSection
+    div#chatMessages
+        p No messages
+    div.chatInputField
+            form.chatForm(action="" /*hx-post=`/message/${friend._id}`*/ hx-target='#chatMessages') 
+                div
+                    textarea.textInput(name="text", cols="30", rows="1" placeholder="Type a message")
+                div
+                    button.btn(type="Submit") Send

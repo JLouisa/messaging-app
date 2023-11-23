@@ -1,2 +1,16 @@
-section#loginSection
-    h1 Welcome to the #{title}
+p #{user.username} #{user._id}
+section.home 
+    div#listSection 
+        each friend in friendlist.friends
+            div.friendContainer(hx-get=`/message/${friend._id}`)
+                div.friendProfileImgDiv
+                    img.friendProfileImg(src='images/default_profile.png', alt="profile pic")
+                p.friendInfo 
+                    span
+                        strong= friend.username
+                    span= friend.createdDate.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+                p.friendText Text...
+    div#chatSectionEmpty
+        p 
+        strong WhisperWave 
+        | for everyone!

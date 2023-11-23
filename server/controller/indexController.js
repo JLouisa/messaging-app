@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const UserCollection = require("../model/userModel");
+const FriendlistCollection = require("../model/friendlistModel");
+const GroupCollection = require("../model/groupModel");
 const bcrypt = require("bcryptjs");
 const fs = require("fs");
 const { creator } = require("../../config/creator");
@@ -19,7 +21,7 @@ exports.home = asyncHandler(async function (req, res, next) {
 
 //! Home page
 exports.loginGet = asyncHandler(async function (req, res, next) {
-  res.render("pages/login", { title: "Welcome" });
+  res.render("pages/login", { title: "Log in" });
 });
 
 //! Home page
@@ -49,13 +51,25 @@ exports.loginPost = [
       });
       return;
     } else {
+      try {
+        const user = await UserCollection.findOne({ username: req.body.username.toLowerCase() }).exec();
+        const friendlist = await FriendlistCollection.findOne({ createdByUser: user._id })
+          .populate("friends")
+          .populate("groups")
+          .exec();
+
+        res.render("pages/home", { title: "Welcome", user, friendlist });
+        // res.status(200).json({ user, friendlist });
+      } catch (error) {
+        res.status(400).json({ error });
+      }
       // jwt.sign({ user: user }, process.env.SECRET_JWT_KEY, { algorithm: "RS256" }, (err, token) => {
       //   console.log(token);
       //   res.json({
       //     token: token,
       //   });
       // });
-      res.send("logout POST");
+      // res.send("logout POST");
     }
   }),
 ];

@@ -13,7 +13,7 @@ const groupRouter = require("./server/routes/group");
 const app = express();
 
 // Init Database
-// connectToDatabase();
+connectToDatabase();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
