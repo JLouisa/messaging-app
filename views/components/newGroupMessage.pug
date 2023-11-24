@@ -1,0 +1,9 @@
+div#chatMessages
+    if messages.length > 0
+        each message in messages
+            div.chatBubble
+                p= message.createdByUser.username
+                p= message.text
+                p= message.createdDate.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+    else 
+        p No messages from #{message.group.name}

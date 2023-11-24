@@ -125,7 +125,7 @@ exports.groupMessageIDGet = asyncHandler(async function (req, res, next) {
     const groupMessage = await GroupMessageCollection.find({ group: ID })
       .populate("createdByUser")
       .populate("group")
-      .sort({ createdDate: -1 })
+      .sort({ createdDate: 1 })
       .exec();
     res.render("components/GroupChatMessages", { messages: groupMessage, groupID: req.params.id });
   } catch (error) {
@@ -134,9 +134,48 @@ exports.groupMessageIDGet = asyncHandler(async function (req, res, next) {
   }
 });
 
-exports.groupMessageIDPost = asyncHandler(async function (req, res, next) {
-  res.send("Group Message POST");
-});
+// Post group message
+exports.groupMessageIDPost = [
+  body("text")
+    .notEmpty()
+    .withMessage("Message must not be empty")
+    .trim()
+    .isLength({ min: 1, max: 500 })
+    .withMessage("Message must be between 1 and 500 characters")
+    .escape(),
+
+  asyncHandler(async function (req, res, next) {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values/error messages.
+      return res.status(400).json({
+        data: {
+          text: req.body.text,
+          errors: errors.array(),
+        },
+      });
+    }
+    const ID = req.params.id;
+    // Create and save new group message
+    try {
+      const { useGroupMessage } = creator();
+      const user = await UserCollection.findOne({ _id: "655e330c2ae9277f6ab2a59e" });
+      const newGroupMessage = useGroupMessage(req.body.text, user, ID);
+      await newGroupMessage.save();
+      const groupMessages = await GroupMessageCollection.find({ group: ID })
+        .populate("createdByUser")
+        .populate("group")
+        .sort({ createdDate: 1 })
+        .exec();
+      return res.render("components/GroupChatMessages", { groupID: ID, messages: groupMessages });
+    } catch (error) {
+      console.log(error);
+      return res.send({ errors: [{ msg: "Something went wrong sending msg" }] });
+    }
+  }),
+];
 
 exports.groupMessagePut = asyncHandler(async function (req, res, next) {
   res.send("Group Message PUT");

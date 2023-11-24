@@ -3,14 +3,11 @@ const router = express.Router();
 // const snippets = require("../../views/components/snippets");
 const messageController = require("../controller/messageController");
 
-// Direct Messages
+//! Direct Messages
 /* GET messages */
 router.get("/", messageController.messageGet);
 
-// /* POST message */
-// router.post("/", messageController.messagePost);
-
-// Group Messages
+//! Group Messages
 /* GET a message */
 router.get("/group", messageController.groupMessage);
 
@@ -26,7 +23,7 @@ router.put("/group/:id", messageController.groupMessagePut);
 /* POST users signup. */
 router.delete("/group/:id", messageController.groupMessageDelete);
 
-// Direct Messages
+//! Direct Messages
 /* GET a message */
 router.get("/:id", messageController.messageIDGet);
 

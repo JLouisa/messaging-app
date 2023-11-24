@@ -67,11 +67,8 @@ exports.loginPost = [
   body("password").notEmpty().withMessage("Password must not be empty").trim().escape(),
 
   asyncHandler(async function (req, res, next) {
-    console.log(req.body);
     // Extract the validation errors from a request.
     const errors = validationResult(req);
-    console.log(`errors.array()`);
-    console.log(errors.array());
 
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values/error messages.
