@@ -1,0 +1,8 @@
+div#addFriendDiv
+    form.addFriendForm(hx-post="/users/friendlist/add" hx-target='#friendSection' hx-swap="innerHTML") 
+        input.inputAddFriend(type="text" id="addNewFriend" placeholder="Friend's username")
+        div
+            button.btn#addFriendBtn(type="submit")
+                strong Add friend
+            button.btn#cancelFriendBtn(type="button" hx-target='#addFriendDiv' hx-swap='delete')
+                strong Cancel

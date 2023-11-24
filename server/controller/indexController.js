@@ -34,22 +34,55 @@ exports.loginPost = [
     .withMessage("Username must be between 5 and 50 characters")
     .matches(/^[a-zA-Z0-9_]*$/)
     .withMessage("Username can only contain letters, numbers, and underscores")
+    .custom(async (value, { req }) => {
+      try {
+        // Check if the username is in the database
+        const user = await UserCollection.findOne({ username: value.toLowerCase() });
+        if (!user) {
+          throw new Error("Username is wrong or doesn't exsist.");
+        }
+        const match = await bcrypt.compare(req.body.password, user.password);
+        if (!match) {
+          throw new Error("Incorrect password");
+        }
+      } catch (error) {
+        // Handle the error gracefully
+        if (error.message === "Username is wrong or doesn't exsist.") {
+          // Specific error for duplicate username
+          throw new Error("Username is wrong or doesn't exsist.");
+        }
+        // Handle the error gracefully
+        else if (error.message === "Incorrect password") {
+          // Specific error for duplicate username
+          throw new Error("Incorrect password");
+        } else {
+          // Handle other errors, log them, or rethrow if needed
+          console.error("Error checking username:", error);
+          throw new Error("An unexpected error occurred. Please try again later.");
+        }
+      }
+    })
+    .withMessage("Username or password is wrong.")
     .escape(),
   body("password").notEmpty().withMessage("Password must not be empty").trim().escape(),
 
   asyncHandler(async function (req, res, next) {
+    console.log(req.body);
     // Extract the validation errors from a request.
     const errors = validationResult(req);
+    console.log(`errors.array()`);
+    console.log(errors.array());
 
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values/error messages.
-      res.status(400).json({
-        data: {
-          username: req.body.username,
-          errors: errors.array(),
-        },
-      });
-      return;
+      const newErrors = errors.array();
+      return res.render("pages/loginError", { title: "Welcome", errors: newErrors, user: req.body.username });
+
+      // return res.status(400).json({
+      //   // username: req.body.username,
+      //   error: "Error signing in",
+      //   // error: errors.array(),
+      // });
     } else {
       try {
         const user = await UserCollection.findOne({ username: req.body.username.toLowerCase() }).exec();

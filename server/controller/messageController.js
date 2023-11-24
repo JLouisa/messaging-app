@@ -82,6 +82,7 @@ exports.messagePost = [
         },
       });
     }
+
     // Search up message
     try {
       const user = await UserCollection.findOne({ username: "adamthefirst" }).exec();
@@ -96,9 +97,8 @@ exports.messagePost = [
       })
         .populate("createdByUser")
         .populate("userReceiver")
-        .sort({ createdDate: -1 })
+        .sort({ createdDate: 1 })
         .exec();
-
       return res.render("components/chatMessages", { user, receiver, messages });
     } catch (error) {
       console.log(error);

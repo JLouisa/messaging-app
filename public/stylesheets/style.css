@@ -73,7 +73,7 @@ img {
 
 /*! Layout */
 main {
-  max-width: 980px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: var(--paddingBase) 10px;
   min-height: 70vh;
@@ -139,15 +139,22 @@ header > form {
 nav {
   grid-area: "login";
   justify-self: center;
+  display: flex;
+  gap: 1em;
 }
 
-.login {
+.login,
+.profile {
   font-size: clamp(1.2rem, 3vw, 2rem);
   text-decoration: none;
   color: inherit;
 }
 
 .login:hover {
+  text-decoration: underline;
+}
+
+.profile:hover {
   text-decoration: underline;
 }
 
@@ -186,16 +193,80 @@ footer img {
   max-width: 3rem;
 }
 
+/* ==================Main================== */
+#loginSection {
+  margin: 1em auto;
+  width: 300px;
+  justify-self: center;
+}
+
+#loginValidationErrors {
+  color: crimson;
+}
+
 .home {
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: clamp(200px, 300px, 350px) 1fr;
+  grid-template-columns: clamp(200px, 350px, 400px) 1fr;
   grid-template-areas: "friends chat";
 }
 
-.listSection {
+.welcomeUser {
+  text-align: center;
+}
+
+#listSection {
   grid-area: "friends";
-  border: 1px solid blue;
+}
+
+#userDiv {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.userPart {
+  grid-row: 1/2;
+  grid-column: 2/3;
+  justify-self: center;
+}
+
+#userImg {
+  width: 9rem;
+  height: auto;
+}
+
+.addBtn {
+  grid-row: 1/2;
+  grid-column: 3/4;
+  justify-self: center;
+}
+
+.addFriendForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#addFriendDiv {
+  margin-bottom: 2em;
+}
+
+.inputAddFriend {
+  margin: 0;
+}
+
+#addFriendBtn {
+  text-align: center;
+  margin: 0;
+}
+
+.welcomeMessage {
+  padding: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .friendContainer {
@@ -245,12 +316,12 @@ footer img {
   display: grid;
   grid-template-rows: 500px 3rem;
   grid-template-columns: 1fr;
-  border: 1px solid red;
+  border: 1px solid black;
 }
 
 #chatMessages {
   overflow-y: auto;
-  border: 2px solid green;
+  /* border: 2px solid black; */
   grid-row: 1/2;
   grid-column: 1/2;
   padding: var(--paddingBase);
@@ -259,16 +330,34 @@ footer img {
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
 }
+
 /* Add styling for the scrollbar if needed */
 #chatMessages::-webkit-scrollbar {
   width: 6px; /* Adjust the width as needed */
 }
-
 #chatMessages::-webkit-scrollbar-thumb {
   background-color: transparent; /* Set the thumb color */
 }
-
 #chatMessages::-webkit-scrollbar-track {
+  background-color: transparent; /* Set the track color */
+}
+
+#listSection {
+  overflow-y: auto;
+  /* border: 2px solid black; */
+  /* grid-auto-flow: row dense; */
+  /* Hide the scrollbar when not in use */
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+/* Add styling for the scrollbar if needed */
+#listSection::-webkit-scrollbar {
+  width: 6px; /* Adjust the width as needed */
+}
+#listSection::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Set the thumb color */
+}
+#listSection::-webkit-scrollbar-track {
   background-color: transparent; /* Set the track color */
 }
 

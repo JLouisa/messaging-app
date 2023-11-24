@@ -2,8 +2,12 @@ extends ../layout
 block content
     section#loginSection
         h1= title
+        if errors && errors.length > 0    
+            div#loginValidationErrors
+                each error in errors 
+                    div= error.msg
         div
-            form(action="", hx-post="/login" hx-target='#loginSection')
+            form(action="", hx-post="/login" hx-target='#loginSection' hx-swap="outerHTML" hx-vals='{"myVal": "My Value"}')
                 label(for="username") Username:
                 input(type="text" name="username" id="username" value="adamthefirst" placeholder="username" autocomplete="username")
                 label(for="password") Password:
