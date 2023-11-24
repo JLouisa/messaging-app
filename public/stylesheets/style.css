@@ -200,7 +200,8 @@ footer img {
   justify-self: center;
 }
 
-#loginValidationErrors {
+#loginValidationErrors,
+.errorMsg {
   color: crimson;
 }
 

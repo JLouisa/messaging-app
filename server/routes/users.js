@@ -5,8 +5,11 @@ const userController = require("../controller/userController");
 /* GET all users */
 router.get("/", userController.usersGet);
 
-/* GET all users */
+/* GET add users */
 router.get("/add", userController.userAddGet);
+
+/* GET cancel add users */
+router.get("/cancel", userController.userCancelGet);
 
 /* GET all users */
 router.get("/:id", userController.usersIDGet);
@@ -18,6 +21,10 @@ router.put("/:id", userController.usersPut);
 router.delete("/:id", userController.usersDelete);
 
 //Friendlist
+
+/* POST user */
+router.get("/friendlist/add", userController.usersFriendlistAddGet);
+
 /* POST user */
 router.post("/friendlist/add", userController.usersFriendlistAddPost);
 

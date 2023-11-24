@@ -3,9 +3,9 @@ section#loginSection
     if errors.length > 0    
         div#loginValidationErrors
             each error in errors 
-                div= error.msg
+                div - #{error.msg}
     div
-        form(action="", hx-post="/login" hx-target='#loginSection' hx-swap="outerHTML" hx-vals='{"myVal": "My Value"}')
+        form(action="", hx-post="/login" hx-target='#loginSection' hx-swap="outerHTML")
             label(for="username") Username:
             input(type="text" name="username" id="username" value=`${user}` placeholder="username" autocomplete="username")
             label(for="password") Password:

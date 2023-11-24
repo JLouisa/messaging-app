@@ -3,19 +3,22 @@ const router = express.Router();
 // const snippets = require("../../views/components/snippets");
 const groupController = require("../controller/groupController");
 
-/* GET messages */
+/* GET group */
 router.get("/", groupController.groupGet);
 
-/* GET a message */
+/* GET group */
+router.get("/add", groupController.groupAddGet);
+
+/* GET a group */
 router.get("/:id", groupController.groupIDGet);
 
-/* POST message */
+/* POST group */
 router.post("/", groupController.groupPost);
 
-/* GET users signup. */
+/* GET group */
 router.put("/:id", groupController.groupPut);
 
-/* POST users signup. */
+/* POST group */
 router.delete("/:id", groupController.groupDelete);
 
 module.exports = router;

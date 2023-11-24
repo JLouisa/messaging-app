@@ -1,0 +1,7 @@
+div#addDiv  
+    button.btn(hx-get="/users/friendlist/add" hx-target='#addDiv' hx-swap='outerHTML')
+        strong Add friend
+    button.btn(hx-get="/group/add" hx-target='#addDiv' hx-swap='innerHTML')
+        strong Add Group
+    button.btn(hx-get="/users/cancel" hx-target='#addDiv' hx-swap='outerHTML')
+        strong Cancel

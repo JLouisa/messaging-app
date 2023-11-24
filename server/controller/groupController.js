@@ -9,6 +9,10 @@ exports.groupGet = asyncHandler(async function (req, res, next) {
   res.send("Group GET");
 });
 
+exports.groupAddGet = asyncHandler(async function (req, res, next) {
+  res.send("Group GET");
+});
+
 exports.groupIDGet = asyncHandler(async function (req, res, next) {
   res.send("Group ID GET");
 });

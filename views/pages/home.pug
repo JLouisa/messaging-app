@@ -8,7 +8,8 @@ section.home
                 div
                     img#userImg(src="images/default_profile.png", alt="profile pic")
             div.addBtn
-                button.btn(hx-get='/users/add' hx-trigger='click' hx-target="#friendSection" hx-swap="beforebegin") +
+                button.btn(hx-get='/users/add' hx-trigger='click' hx-target="#addDiv" hx-swap="outerHTML") +
+        div#addDiv(hidden=true)
         div#friendSection 
             each friend in friendlist.friends
                 div.friendContainer(hx-get=`/message/${friend._id}` hx-trigger='click' hx-target="#chatSection" hx-swap="innerHTML")
