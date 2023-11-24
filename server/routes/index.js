@@ -24,24 +24,7 @@ router.post("/signup", indexController.signupPost);
 /* POST users logout. */
 router.post("/logout", indexController.logoutPost);
 
-router.post("/clicked-ping", function (req, res, next) {
-  res.render("components/ping", { name: "Ping" });
-});
-
-router.post("/clicked-pong", function (req, res, next) {
-  res.render("components/pong", { name: "Pong" });
-});
-
-// router.post("/clicked-ping", function (req, res, next) {
-//   res.send(snippets.ping);
-// });
-
-// router.post("/clicked-pong", function (req, res, next) {
-//   res.send(snippets.pong);
-// });
-
-// router.post("/clicked", function (req, res, next) {
-//   res.send("<h1>Clicked</h1>");
-// });
+/* Get user profile. */
+router.get("/profile", indexController.profilePost);
 
 module.exports = router;

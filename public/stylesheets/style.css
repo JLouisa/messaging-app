@@ -59,6 +59,8 @@ select {
   text-decoration: none;
   margin: 4px 2px;
   cursor: pointer;
+  transition: 1s;
+  border-radius: var(--borderRadius);
 }
 
 .btnDelete {
@@ -138,7 +140,7 @@ header > form {
 
 nav {
   grid-area: "login";
-  justify-self: center;
+  justify-self: end;
   display: flex;
   gap: 1em;
 }
@@ -156,6 +158,52 @@ nav {
 
 .profile:hover {
   text-decoration: underline;
+}
+
+.profileSection {
+  width: 480px;
+  margin: 1em auto;
+}
+
+.profileFriendContrainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profileFriendContrainer strong {
+  font-size: var(--fontSizeLG);
+}
+
+.profileFriendContrainer button {
+  font-size: var(--fontSizeMD);
+}
+
+.profilePageImg {
+  width: calc(var(--fontSizeXL) * 2);
+  height: auto;
+  display: block; /* Ensures that the margin property works correctly */
+  margin: 0 auto; /* Centers the image horizontally */
+}
+
+.profileBtns {
+  display: flex;
+  justify-content: space-between;
+}
+
+div #profileUsername {
+  text-align: center;
+  font-size: var(--fontSizeXL);
+}
+.profileBtn {
+  font-size: var(--fontSizeMD);
+}
+
+.btn2:hover {
+  color: black;
+  background-color: whitesmoke;
+  outline: 1px solid black;
+  transition: background-color 0.2s ease, color 0.22s ease;
 }
 
 /* .bubbleImg {
@@ -270,6 +318,37 @@ footer img {
   align-items: center;
 }
 
+#friendSection {
+  max-height: calc(700px + 3rem);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+#friendSection::-webkit-scrollbar {
+  width: 6px;
+}
+
+#friendSection::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+#friendSection::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+#friendSection:hover {
+  scrollbar-color: #888 transparent; /* Set the color for the thumb and the track when scrolling */
+}
+
+#friendSection:hover::-webkit-scrollbar-thumb {
+  background-color: #888;
+}
+
+#friendSection:hover::-webkit-scrollbar-track {
+  background-color: transparent; /* Set the color for the track when scrolling */
+}
+
 .friendContainer {
   border: 1px solid black;
   display: grid;
@@ -313,9 +392,8 @@ footer img {
 }
 
 #chatSection {
-  grid-area: "chat";
   display: grid;
-  grid-template-rows: 500px 3rem;
+  grid-template-rows: 700px 3rem;
   grid-template-columns: 1fr;
   border: 1px solid black;
 }
@@ -340,25 +418,6 @@ footer img {
   background-color: transparent; /* Set the thumb color */
 }
 #chatMessages::-webkit-scrollbar-track {
-  background-color: transparent; /* Set the track color */
-}
-
-#listSection {
-  overflow-y: auto;
-  /* border: 2px solid black; */
-  /* grid-auto-flow: row dense; */
-  /* Hide the scrollbar when not in use */
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
-}
-/* Add styling for the scrollbar if needed */
-#listSection::-webkit-scrollbar {
-  width: 6px; /* Adjust the width as needed */
-}
-#listSection::-webkit-scrollbar-thumb {
-  background-color: transparent; /* Set the thumb color */
-}
-#listSection::-webkit-scrollbar-track {
   background-color: transparent; /* Set the track color */
 }
 

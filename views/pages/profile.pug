@@ -1,0 +1,17 @@
+section.profileSection
+    div 
+        img.profilePageImg(src="images/default_profile.png", alt="profile img")
+    div 
+        div#profileUsername
+            span
+                strong #{user.username}
+        div.profileBtns 
+            button.btn.btn2.profileBtn Friends list
+            button.btn.btn2.profileBtn Pending requests
+        br
+        div.profileFriendslist Friends list: 
+            each friend in friendlist.friends
+                div.profileFriendContrainer
+                    span 
+                        strong= friend.username
+                    button.btn.btn2(hx-put=`/user/${friend._id}/unfriend`) unfriend

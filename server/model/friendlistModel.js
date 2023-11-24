@@ -2,9 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const FriendlistSchema = new Schema({
-  createdByUser: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
-  groups: [{ type: Schema.Types.ObjectId, ref: "Group" }],
+  createdByUser: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  groups: [{ type: mongoose.Schema.Types.ObjectId, ref: "Group" }],
+  pending: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 // Virtual for friendlist's URL

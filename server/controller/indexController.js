@@ -73,7 +73,7 @@ exports.loginPost = [
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values/error messages.
       const newErrors = errors.array();
-      return res.render("pages/loginError", { title: "Welcome", errors: newErrors, user: req.body.username });
+      return res.render("pages/loginError", { errors: newErrors, user: req.body.username });
     } else {
       try {
         const user = await UserCollection.findOne({ username: req.body.username.toLowerCase() }).exec();
@@ -81,8 +81,9 @@ exports.loginPost = [
           .populate("friends")
           .populate("groups")
           .exec();
-
-        res.render("pages/home", { title: "Welcome", user, friendlist });
+        console.log("friendlist");
+        console.log(friendlist);
+        res.render("pages/home", { user, friendlist });
         // res.status(200).json({ user, friendlist });
       } catch (error) {
         res.status(400).json({ error });
@@ -169,4 +170,20 @@ exports.signupPost = [
 //! Home page
 exports.logoutPost = asyncHandler(async function (req, res, next) {
   res.send("logout POST");
+});
+
+//! Profile
+exports.profilePost = asyncHandler(async function (req, res, next) {
+  try {
+    const [user, friendlist] = await Promise.all([
+      UserCollection.findOne({ _id: "655e330c2ae9277f6ab2a59e" }).exec(),
+      FriendlistCollection.findOne({ createdByUser: "655e330c2ae9277f6ab2a59e" })
+        .populate("friends")
+        .sort({ friends: 1 })
+        .exec(),
+    ]);
+    res.render("pages/profile", { user, friendlist });
+  } catch (error) {
+    console.log("somehint went wrong getting friendlist", { error });
+  }
 });
