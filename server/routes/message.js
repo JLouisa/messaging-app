@@ -18,7 +18,7 @@ router.get("/group", messageController.groupMessage);
 router.get("/group/:id", messageController.groupMessageIDGet);
 
 /* POST message */
-router.post("/group", messageController.groupMessagePost);
+router.post("/group/:id", messageController.groupMessageIDPost);
 
 /* GET users signup. */
 router.put("/group/:id", messageController.groupMessagePut);

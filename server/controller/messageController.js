@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const MessageCollection = require("../model/messageModel");
+const GroupMessageCollection = require("../model/groupMessageModel");
 const UserCollection = require("../model/userModel");
 const { creator } = require("../../config/creator");
 const bcrypt = require("bcryptjs");
@@ -53,8 +54,6 @@ exports.messagePost = [
     .escape(),
 
   asyncHandler(async function (req, res, next) {
-    console.log(`req.body`);
-    console.log(req.body);
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
@@ -67,7 +66,6 @@ exports.messagePost = [
         },
       });
     }
-    console.log("still here");
     const ID = req.params.id;
     // Create and save new message
     try {
@@ -120,11 +118,23 @@ exports.groupMessage = asyncHandler(async function (req, res, next) {
   res.send("Group Message GET");
 });
 
+// GET Group Messages
 exports.groupMessageIDGet = asyncHandler(async function (req, res, next) {
-  res.send("Group Message ID GET");
+  const ID = req.params.id;
+  try {
+    const groupMessage = await GroupMessageCollection.find({ group: ID })
+      .populate("createdByUser")
+      .populate("group")
+      .sort({ createdDate: -1 })
+      .exec();
+    res.render("components/GroupChatMessages", { messages: groupMessage, groupID: req.params.id });
+  } catch (error) {
+    console.log(error);
+    res.send("Something went wrong getting group message");
+  }
 });
 
-exports.groupMessagePost = asyncHandler(async function (req, res, next) {
+exports.groupMessageIDPost = asyncHandler(async function (req, res, next) {
   res.send("Group Message POST");
 });
 

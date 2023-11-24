@@ -1,0 +1,22 @@
+div#chatMessages
+    if messages.length > 0
+        each message in messages
+            div.chatBubble
+                p= message.createdByUser.username
+                p= message.text
+                p= message.createdDate.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+    else 
+        p No messages from #{message.group.name}
+div.chatInputField
+        form.chatForm(hx-post=`/message/group/${groupID}` hx-target='#chatSection' hx-swap="innerHTML") 
+            div
+                textarea.textInput(name="text", cols="30", rows="1" placeholder="Type a message")
+            div
+                button.btn(type="Submit") Send
+
+script.
+    async function loadMessages() {
+        const chatMessages = document.getElementById('chatMessages')
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    loadMessages();

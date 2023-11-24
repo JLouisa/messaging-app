@@ -31,6 +31,17 @@ exports.usersDelete = asyncHandler(async function (req, res, next) {
   res.send("User DELETE");
 });
 
+// Get friendlist
+exports.usersFriendlistGet = asyncHandler(async function (req, res, next) {
+  const friendlist = await FriendlistCollection.findOne({ createdByUser: "655e330c2ae9277f6ab2a59e" })
+    .populate("friends")
+    .exec();
+
+  // res.send("<p>Test</p>");
+  res.render("components/friendlist", { friendlist });
+});
+
+// Add friend to list Form
 exports.usersFriendlistAddGet = asyncHandler(async function (req, res, next) {
   res.render("components/addFriendForm");
 });

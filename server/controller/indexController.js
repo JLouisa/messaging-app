@@ -77,12 +77,6 @@ exports.loginPost = [
       // There are errors. Render the form again with sanitized values/error messages.
       const newErrors = errors.array();
       return res.render("pages/loginError", { title: "Welcome", errors: newErrors, user: req.body.username });
-
-      // return res.status(400).json({
-      //   // username: req.body.username,
-      //   error: "Error signing in",
-      //   // error: errors.array(),
-      // });
     } else {
       try {
         const user = await UserCollection.findOne({ username: req.body.username.toLowerCase() }).exec();
@@ -96,13 +90,6 @@ exports.loginPost = [
       } catch (error) {
         res.status(400).json({ error });
       }
-      // jwt.sign({ user: user }, process.env.SECRET_JWT_KEY, { algorithm: "RS256" }, (err, token) => {
-      //   console.log(token);
-      //   res.json({
-      //     token: token,
-      //   });
-      // });
-      // res.send("logout POST");
     }
   }),
 ];

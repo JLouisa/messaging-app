@@ -11,9 +11,6 @@ router.get("/add", userController.userAddGet);
 /* GET cancel add users */
 router.get("/cancel", userController.userCancelGet);
 
-/* GET all users */
-router.get("/:id", userController.usersIDGet);
-
 /* PUT user info change */
 router.put("/:id", userController.usersPut);
 
@@ -22,7 +19,10 @@ router.delete("/:id", userController.usersDelete);
 
 //Friendlist
 
-/* POST user */
+/* GET user friendlist*/
+router.get("/friendlist", userController.usersFriendlistGet);
+
+/* GET user */
 router.get("/friendlist/add", userController.usersFriendlistAddGet);
 
 /* POST user */
@@ -33,5 +33,9 @@ router.put("/friendlist/:id", userController.usersFriendlistPut);
 
 /* DELETE user */
 router.delete("/friendlist/:id", userController.usersFriendlistDelete);
+
+// User
+/* GET all users */
+router.get("/:id", userController.usersIDGet);
 
 module.exports = router;
