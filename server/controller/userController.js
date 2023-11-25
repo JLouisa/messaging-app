@@ -2,9 +2,15 @@ const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const UserCollection = require("../model/userModel");
 const FriendlistCollection = require("../model/friendlistModel");
+const mongoose = require("mongoose");
+const { creator } = require("../../config/creator");
+const { startSession } = require("mongoose");
 const bcrypt = require("bcryptjs");
 // const fs = require("fs");
 // const reservedUsernames = JSON.parse(fs.readFileSync(__dirname + "/reservedUsernames.json", "utf8")).reservedUsernames;
+
+//? Dev User ID
+const { devUser } = require("../../config/devUser");
 
 exports.usersGet = asyncHandler(async function (req, res, next) {
   res.send("Users GET");
@@ -33,9 +39,7 @@ exports.usersDelete = asyncHandler(async function (req, res, next) {
 
 // Get friendlist
 exports.usersFriendlistGet = asyncHandler(async function (req, res, next) {
-  const friendlist = await FriendlistCollection.findOne({ createdByUser: "656144192cf2499410157191" })
-    .populate("friends")
-    .exec();
+  const friendlist = await FriendlistCollection.findOne({ createdByUser: devUser }).populate("friends").exec();
 
   // res.send("<p>Test</p>");
   res.render("components/friendlist", { friendlist });
@@ -74,9 +78,7 @@ exports.usersFriendlistAddPost = [
     }
 
     try {
-      const myFriendlist = await FriendlistCollection.findOne({ createdByUser: "656144192cf2499410157191" })
-        .populate("friends")
-        .exec();
+      const myFriendlist = await FriendlistCollection.findOne({ createdByUser: devUser }).populate("friends").exec();
 
       const isFriend = myFriendlist.friends.some((item) => item.username === req.body.addNewFriend);
 
@@ -87,13 +89,13 @@ exports.usersFriendlistAddPost = [
         });
       }
 
-      const meTheUser = await UserCollection.findOne({ _id: "656144192cf2499410157191" }).exec();
+      const meTheUser = await UserCollection.findOne({ _id: devUser }).exec();
       const userFriend = await UserCollection.findOne({ username: req.body.addNewFriend.toLowerCase() }).exec();
       const userFriendlist = await FriendlistCollection.findOne({ createdByUser: userFriend._id })
         .populate("pending")
         .exec();
 
-      const isPending = userFriendlist.pending.some((item) => item._id === "656144192cf2499410157191");
+      const isPending = userFriendlist.pending.some((item) => item._id === devUser);
 
       if (!isPending) {
         userFriendlist.pending.push(meTheUser);
@@ -113,9 +115,7 @@ exports.usersFriendlistAddPost = [
 
 //Get friendlist in profile
 exports.usersProfileFriendlistGet = asyncHandler(async function (req, res, next) {
-  const friendlist = await FriendlistCollection.findOne({ createdByUser: "656144192cf2499410157191" })
-    .populate("friends")
-    .exec();
+  const friendlist = await FriendlistCollection.findOne({ createdByUser: devUser }).populate("friends").exec();
 
   // res.send("<p>Test</p>");
   res.render("components/profileFriendsList", { friendlist });
@@ -124,20 +124,93 @@ exports.usersProfileFriendlistGet = asyncHandler(async function (req, res, next)
 // Get pending list in profile
 exports.usersFriendlistPendingGet = asyncHandler(async function (req, res, next) {
   try {
-    const pendingList = await FriendlistCollection.findOne({ createdByUser: "656144192cf2499410157191" })
-      .populate("pending")
-      .exec();
-    res.render("components/pendingList", { pendingList: pendingList.pending });
+    const pendingList = await FriendlistCollection.findOne({ createdByUser: devUser }).populate("pending").exec();
+    res.render("components/pendingList", { pendingList: pendingList });
   } catch (error) {
     console.log("Something went wrong getting the pending list", error);
     res.send("<p>Something went wrong getting the pending list</p>");
   }
 });
 
-exports.usersFriendlistPut = asyncHandler(async function (req, res, next) {
-  res.send("User friendlist PUT");
+//! PUT Friendlist
+exports.usersFriendlistIDPut = asyncHandler(async function (req, res, next) {
+  const ID = req.params.id;
+
+  try {
+    // Start Atomic Operations
+    const session = await mongoose.startSession();
+    // session.startTransaction();
+    await session.withTransaction(async () => {
+      const [myUser, theUser] = await Promise.all([
+        UserCollection.findOne({ _id: devUser }).session(session),
+        UserCollection.findOne({ _id: ID }).session(session),
+      ]);
+
+      const [myFriendlist, userFriendlist] = await Promise.all([
+        FriendlistCollection.findOne({ createdByUser: devUser }).populate("pending").session(session).exec(),
+        FriendlistCollection.findOne({ createdByUser: ID }).populate("pending").session(session).exec(),
+      ]);
+
+      const fr = myFriendlist.pending.filter((friend) => {
+        return friend._id.toString() === theUser._id.toString();
+      });
+
+      const restFr = myFriendlist.pending.filter((friend) => {
+        return friend._id.toString() !== theUser._id.toString();
+      });
+
+      // Update user friendlist
+      myFriendlist.friends.push(fr[0]._id);
+
+      // Update user pending list
+      myFriendlist.pending = [...restFr];
+
+      // Update friend's friendlist
+      userFriendlist.friends.push(myUser._id);
+
+      // Save to database
+      await myFriendlist.save();
+      await userFriendlist.save();
+
+      res.render("components/pendingList", { pendingList: myFriendlist });
+    });
+
+    // Commit and end the transaction
+    await session.commitTransaction();
+    session.endSession();
+  } catch (error) {
+    // Handle errors and perform rollback
+    console.error("Transaction error:", error);
+
+    // Rollback the transaction
+    await session.abortTransaction();
+    session.endSession();
+
+    // Handle the error
+    console.log("Something went wrong with accepting the friend request", error);
+    res.send("Something went wrong accepting");
+  }
 });
 
 exports.usersFriendlistDelete = asyncHandler(async function (req, res, next) {
-  res.send("User friendlist POST");
+  const ID = req.params.id;
+  try {
+    const userFriendlist = await FriendlistCollection.findOne({ createdByUser: devUser });
+    const newPendingList = userFriendlist.pending.filter((friend) => {
+      return friend._id.toString() !== ID;
+    });
+
+    // Update user pending list
+    userFriendlist.pending = [...newPendingList];
+
+    console.log(`userFriendlist.pending`);
+    console.log(userFriendlist.pending);
+
+    // Save to database
+    await userFriendlist.save();
+
+    res.render("components/pendingList", { pendingList: userFriendlist });
+  } catch (error) {
+    console.log("Something went wrong with removing friend request", error);
+  }
 });

@@ -9,7 +9,7 @@ section.home
             div.addBtn
                 button.btn(hx-get='/users/add' hx-trigger='click' hx-target="#addDiv" hx-swap="outerHTML") +
         div#addDiv(hidden=true)
-        div 
+        div.friendGroupBtns 
             button.btn(hx-get=`users/friendlist` hx-trigger='click' hx-target="#friendSection" hx-swap="outerHTML") Friends
              button.btn(hx-get=`/group` hx-trigger='click' hx-target="#friendSection" hx-swap="outerHTML") Groups
         div#friendSection 

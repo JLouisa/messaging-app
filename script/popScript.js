@@ -99,7 +99,7 @@ async function messageCreate(index, text, createdByUser, userReceiver) {
   try {
     await characterN.save();
     messageArr[index] = characterN;
-    console.log(`Added message: ${messageArr[index]}`);
+    console.log(`Added message: messageArr${[index]}`);
   } catch (error) {
     console.log(error);
   }
@@ -126,7 +126,7 @@ async function GroupMessageCreate(index, text, createdByUser, userReceiver) {
   try {
     await characterN.save();
     groupMessageArr[index] = characterN;
-    console.log(`Added message: ${groupMessageArr[index]}`);
+    console.log(`Added message: groupMessageArr${[index]}`);
   } catch (error) {
     console.log(error);
   }
@@ -152,7 +152,7 @@ async function friendlistCreate(index, createdByUser, friends, groups, pending) 
   try {
     await characterN.save();
     friendlistArr[index] = characterN;
-    console.log(`Added friendlist: ${friendlistArr[index]}`);
+    console.log(`Added friendlist: ${characterN.createdByUser.username}`);
   } catch (error) {
     console.log(error);
   }
@@ -167,7 +167,7 @@ async function popFriendlist() {
       userArr[0],
       [userArr[1], userArr[2], userArr[3], userArr[10]],
       [groupArr[0]],
-      [userArr[6], userArr[8]]
+      [userArr[4], userArr[5], userArr[6], userArr[7]]
     ),
     friendlistCreate(1, userArr[1], [userArr[0], userArr[3], userArr[4], userArr[7]], [groupArr[1]], []),
     friendlistCreate(2, userArr[2], [userArr[0], userArr[4], userArr[5], userArr[8], userArr[9]], [groupArr[2]], []),

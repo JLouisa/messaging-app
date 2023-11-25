@@ -1,12 +1,12 @@
-div#profileList 
+div#profileList
     div#pendingListDiv 
-        if pendingList && pendingList.length > 0
-            each request in pendingList
+        if pendingList && pendingList.pending.length > 0
+            each request in pendingList.pending
                 div.pendingRequesteContainer
                     p.pendingUsernames= request.username
                     div
-                        button.btn.btn2(hx-put='/users/friendlist/') Accept
-                        button.btn.btn2(hx-delete='/users/friendlist/pending') Deny
+                        button.btn.btn2(hx-put=`/users/friendlist/${request._id}` hx-target="#profileList" hx-swap="outerHTML" hx-trigger="click") Accept
+                        button.btn.btn2(hx-delete=`/users/friendlist/pending/${request._id}` hx-target="#profileList" hx-swap="outerHTML" hx-trigger="click") Deny
 
         else
             p You have no pending friend requests

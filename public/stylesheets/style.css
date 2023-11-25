@@ -292,6 +292,12 @@ footer img {
   justify-self: center;
 }
 
+.friendGroupBtns {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
 #userImg {
   width: 9rem;
   height: auto;
@@ -331,7 +337,7 @@ footer img {
 }
 
 #friendSection {
-  max-height: calc(700px + 3rem);
+  max-height: calc(700px + 3rem - calc(151px + 55px));
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
@@ -405,6 +411,7 @@ footer img {
 
 #chatSection {
   display: grid;
+  max-height: calc(700px + 3rem);
   grid-template-rows: 700px 3rem;
   grid-template-columns: 1fr;
   border: 1px solid black;

@@ -9,6 +9,9 @@ const { creator } = require("../../config/creator");
 const jwt = require("jsonwebtoken");
 // const reservedUsernames = JSON.parse(fs.readFileSync(__dirname + "/reservedUsernames.json", "utf8")).reservedUsernames;
 
+//? Dev User ID
+const { devUser } = require("../../config/devUser");
+
 //! Home page
 exports.homeGet = asyncHandler(async function (req, res, next) {
   res.render("pages/login", { title: "Welcome" });
@@ -174,16 +177,13 @@ exports.logoutPost = asyncHandler(async function (req, res, next) {
 exports.profileGet = asyncHandler(async function (req, res, next) {
   try {
     const [user, friendlist] = await Promise.all([
-      UserCollection.findOne({ _id: "656144192cf2499410157191" }).exec(),
-      FriendlistCollection.findOne({ createdByUser: "656144192cf2499410157191" })
-        .populate("friends")
-        .sort({ friends: 1 })
-        .exec(),
+      UserCollection.findOne({ _id: devUser }).exec(),
+      FriendlistCollection.findOne({ createdByUser: devUser }).populate("friends").sort({ friends: 1 }).exec(),
     ]);
-    console.log(`user`);
-    console.log(user);
-    console.log(`friendlist`);
-    console.log(friendlist);
+    // console.log(`user`);
+    // console.log(user);
+    // console.log(`friendlist`);
+    // console.log(friendlist);
     res.render("pages/profile", { user, friendlist });
   } catch (error) {
     console.log("somehint went wrong getting friendlist", { error });

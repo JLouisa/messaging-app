@@ -6,9 +6,12 @@ const bcrypt = require("bcryptjs");
 // const fs = require("fs");
 // const reservedUsernames = JSON.parse(fs.readFileSync(__dirname + "/reservedUsernames.json", "utf8")).reservedUsernames;
 
+//? Dev User ID
+const { devUser } = require("../../config/devUser");
+
 exports.groupGet = asyncHandler(async function (req, res, next) {
   try {
-    const groups = await GroupCollection.find({ members: "656144192cf2499410157191" }).populate("members");
+    const groups = await GroupCollection.find({ members: devUser }).populate("members");
     return res.render("components/groupList", { groups });
   } catch (error) {
     console.log("There was an issue getting group", error);
