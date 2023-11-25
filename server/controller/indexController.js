@@ -81,8 +81,6 @@ exports.loginPost = [
           .populate("friends")
           .populate("groups")
           .exec();
-        console.log("friendlist");
-        console.log(friendlist);
         res.render("pages/home", { user, friendlist });
         // res.status(200).json({ user, friendlist });
       } catch (error) {

@@ -1,0 +1,11 @@
+div#profileList 
+    div#pendingListDiv 
+        if pendingList && pendingList.length > 0
+            each request in pendingList
+                div
+                    p= request.username
+                    button.btn Accept
+                    button.btn Deny
+
+        else
+            p You have no pending friend requests

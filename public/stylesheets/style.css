@@ -150,6 +150,7 @@ nav {
   font-size: clamp(1.2rem, 3vw, 2rem);
   text-decoration: none;
   color: inherit;
+  cursor: pointer;
 }
 
 .login:hover {

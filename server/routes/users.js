@@ -22,8 +22,14 @@ router.delete("/:id", userController.usersDelete);
 /* GET user friendlist*/
 router.get("/friendlist", userController.usersFriendlistGet);
 
+/* GET user friendlist in Profile */
+router.get("/friendlist/profile", userController.usersProfileFriendlistGet);
+
 /* GET user */
 router.get("/friendlist/add", userController.usersFriendlistAddGet);
+
+/* GET user friend request */
+router.get("/friendlist/pending", userController.usersFriendlistPendingGet);
 
 /* POST user */
 router.post("/friendlist/add", userController.usersFriendlistAddPost);
