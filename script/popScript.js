@@ -147,8 +147,8 @@ async function popGroupMessage() {
 
 //! GroupMessage - 5
 // Create character function
-async function friendlistCreate(index, createdByUser, friends, groups) {
-  const characterN = await useFriendlist(createdByUser, friends, groups);
+async function friendlistCreate(index, createdByUser, friends, groups, pending) {
+  const characterN = await useFriendlist(createdByUser, friends, groups, pending);
   try {
     await characterN.save();
     friendlistArr[index] = characterN;
@@ -162,26 +162,22 @@ async function friendlistCreate(index, createdByUser, friends, groups) {
 async function popFriendlist() {
   console.log("Adding friendlist");
   await Promise.all([
-    friendlistCreate(0, userArr[0], [userArr[1], userArr[2], userArr[3], userArr[10]], [groupArr[0]]),
-
-    friendlistCreate(1, userArr[1], [userArr[0], userArr[3], userArr[4], userArr[7]], [groupArr[1]]),
-
-    friendlistCreate(2, userArr[2], [userArr[0], userArr[4], userArr[5], userArr[8], userArr[9]], [groupArr[2]]),
-
-    friendlistCreate(3, userArr[3], [userArr[0], userArr[1], userArr[6], userArr[9]], [groupArr[3]]),
-
-    friendlistCreate(4, userArr[4], [userArr[1], userArr[4], userArr[7]], [groupArr[4]]),
-
-    friendlistCreate(5, userArr[5], [userArr[2], userArr[7], userArr[8]], [groupArr[5]]),
-
-    friendlistCreate(6, userArr[6], [userArr[3], userArr[8], userArr[9]], []),
-
-    friendlistCreate(7, userArr[7], [userArr[4], userArr[5], userArr[1], userArr[10]], []),
-
-    friendlistCreate(8, userArr[8], [userArr[5], userArr[6], userArr[2], userArr[10]], []),
-
-    friendlistCreate(9, userArr[9], [userArr[6], userArr[2], userArr[3]], [groupArr[2]]),
-
-    friendlistCreate(10, userArr[10], [userArr[0], userArr[7], userArr[8]], [groupArr[3]]),
+    friendlistCreate(
+      0,
+      userArr[0],
+      [userArr[1], userArr[2], userArr[3], userArr[10]],
+      [groupArr[0]],
+      [userArr[6], userArr[8]]
+    ),
+    friendlistCreate(1, userArr[1], [userArr[0], userArr[3], userArr[4], userArr[7]], [groupArr[1]], []),
+    friendlistCreate(2, userArr[2], [userArr[0], userArr[4], userArr[5], userArr[8], userArr[9]], [groupArr[2]], []),
+    friendlistCreate(3, userArr[3], [userArr[0], userArr[1], userArr[6], userArr[9]], [groupArr[3]], []),
+    friendlistCreate(4, userArr[4], [userArr[1], userArr[4], userArr[7]], [groupArr[4]], []),
+    friendlistCreate(5, userArr[5], [userArr[2], userArr[7], userArr[8]], [groupArr[5]], []),
+    friendlistCreate(6, userArr[6], [userArr[3], userArr[8], userArr[9]], [], []),
+    friendlistCreate(7, userArr[7], [userArr[4], userArr[5], userArr[1], userArr[10]], [], []),
+    friendlistCreate(8, userArr[8], [userArr[5], userArr[6], userArr[2], userArr[10]], [], []),
+    friendlistCreate(9, userArr[9], [userArr[6], userArr[2], userArr[3]], [groupArr[2]], []),
+    friendlistCreate(10, userArr[10], [userArr[0], userArr[7], userArr[8]], [groupArr[3]], []),
   ]);
 }

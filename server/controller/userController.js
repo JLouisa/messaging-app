@@ -33,7 +33,7 @@ exports.usersDelete = asyncHandler(async function (req, res, next) {
 
 // Get friendlist
 exports.usersFriendlistGet = asyncHandler(async function (req, res, next) {
-  const friendlist = await FriendlistCollection.findOne({ createdByUser: "655e330c2ae9277f6ab2a59e" })
+  const friendlist = await FriendlistCollection.findOne({ createdByUser: "656144192cf2499410157191" })
     .populate("friends")
     .exec();
 
@@ -74,7 +74,7 @@ exports.usersFriendlistAddPost = [
     }
 
     try {
-      const myFriendlist = await FriendlistCollection.findOne({ createdByUser: "655e330c2ae9277f6ab2a59e" })
+      const myFriendlist = await FriendlistCollection.findOne({ createdByUser: "656144192cf2499410157191" })
         .populate("friends")
         .exec();
 
@@ -87,23 +87,18 @@ exports.usersFriendlistAddPost = [
         });
       }
 
-      const meTheUser = await UserCollection.findOne({ _id: "655e330c2ae9277f6ab2a59e" }).exec();
+      const meTheUser = await UserCollection.findOne({ _id: "656144192cf2499410157191" }).exec();
       const userFriend = await UserCollection.findOne({ username: req.body.addNewFriend.toLowerCase() }).exec();
       const userFriendlist = await FriendlistCollection.findOne({ createdByUser: userFriend._id })
         .populate("pending")
         .exec();
 
-      console.log(`Before Pending`);
-      console.log(myFriendlist);
-
-      const isPending = userFriendlist.pending.some((item) => item._id === "655e330c2ae9277f6ab2a59e");
+      const isPending = userFriendlist.pending.some((item) => item._id === "656144192cf2499410157191");
 
       if (!isPending) {
-        myFriendlist.pending.push(userFriend);
+        userFriendlist.pending.push(meTheUser);
         await userFriendlist.save();
       }
-      console.log(`After Pending`);
-      console.log(myFriendlist);
       return res.render("components/addFriendUpdate", { title: "Welcome", friendlist: myFriendlist, user: meTheUser });
     } catch (error) {
       console.error("Error adding friend:", error);
@@ -118,7 +113,7 @@ exports.usersFriendlistAddPost = [
 
 //Get friendlist in profile
 exports.usersProfileFriendlistGet = asyncHandler(async function (req, res, next) {
-  const friendlist = await FriendlistCollection.findOne({ createdByUser: "655e330c2ae9277f6ab2a59e" })
+  const friendlist = await FriendlistCollection.findOne({ createdByUser: "656144192cf2499410157191" })
     .populate("friends")
     .exec();
 
@@ -129,11 +124,9 @@ exports.usersProfileFriendlistGet = asyncHandler(async function (req, res, next)
 // Get pending list in profile
 exports.usersFriendlistPendingGet = asyncHandler(async function (req, res, next) {
   try {
-    const pendingList = await FriendlistCollection.find({ createdByUser: "655e330c2ae9277f6ab2a59e" })
+    const pendingList = await FriendlistCollection.findOne({ createdByUser: "656144192cf2499410157191" })
       .populate("pending")
       .exec();
-    console.log(`pendingList`);
-    console.log(pendingList.pending);
     res.render("components/pendingList", { pendingList: pendingList.pending });
   } catch (error) {
     console.log("Something went wrong getting the pending list", error);

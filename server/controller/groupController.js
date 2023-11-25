@@ -8,7 +8,7 @@ const bcrypt = require("bcryptjs");
 
 exports.groupGet = asyncHandler(async function (req, res, next) {
   try {
-    const groups = await GroupCollection.find({ members: "655e330c2ae9277f6ab2a59e" }).populate("members");
+    const groups = await GroupCollection.find({ members: "656144192cf2499410157191" }).populate("members");
     return res.render("components/groupList", { groups });
   } catch (error) {
     console.log("There was an issue getting group", error);

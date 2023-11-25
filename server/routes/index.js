@@ -25,6 +25,6 @@ router.post("/signup", indexController.signupPost);
 router.post("/logout", indexController.logoutPost);
 
 /* Get user profile. */
-router.get("/profile", indexController.profilePost);
+router.get("/profile", indexController.profileGet);
 
 module.exports = router;

@@ -49,9 +49,9 @@ const creator = () => {
     return groupMessage;
   };
 
-  const useFriendlist = (createdByUser, friends, groups) => {
+  const useFriendlist = (createdByUser, friends, groups, pending) => {
     // Create a new friendlist instance
-    const friendlist = FriendlistCollection({ createdByUser, friends, groups });
+    const friendlist = FriendlistCollection({ createdByUser, friends, groups, pending });
 
     return friendlist;
   };

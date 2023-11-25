@@ -171,15 +171,19 @@ exports.logoutPost = asyncHandler(async function (req, res, next) {
 });
 
 //! Profile
-exports.profilePost = asyncHandler(async function (req, res, next) {
+exports.profileGet = asyncHandler(async function (req, res, next) {
   try {
     const [user, friendlist] = await Promise.all([
-      UserCollection.findOne({ _id: "655e330c2ae9277f6ab2a59e" }).exec(),
-      FriendlistCollection.findOne({ createdByUser: "655e330c2ae9277f6ab2a59e" })
+      UserCollection.findOne({ _id: "656144192cf2499410157191" }).exec(),
+      FriendlistCollection.findOne({ createdByUser: "656144192cf2499410157191" })
         .populate("friends")
         .sort({ friends: 1 })
         .exec(),
     ]);
+    console.log(`user`);
+    console.log(user);
+    console.log(`friendlist`);
+    console.log(friendlist);
     res.render("pages/profile", { user, friendlist });
   } catch (error) {
     console.log("somehint went wrong getting friendlist", { error });

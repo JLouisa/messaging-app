@@ -70,7 +70,7 @@ exports.messagePost = [
     // Create and save new message
     try {
       const { useMessage } = creator();
-      const newMessage = useMessage(req.body.text, "655e330c2ae9277f6ab2a59e", ID);
+      const newMessage = useMessage(req.body.text, "656144192cf2499410157191", ID);
       await newMessage.save();
     } catch (error) {
       return res.status(400).json({
@@ -161,7 +161,7 @@ exports.groupMessageIDPost = [
     // Create and save new group message
     try {
       const { useGroupMessage } = creator();
-      const user = await UserCollection.findOne({ _id: "655e330c2ae9277f6ab2a59e" });
+      const user = await UserCollection.findOne({ _id: "656144192cf2499410157191" });
       const newGroupMessage = useGroupMessage(req.body.text, user, ID);
       await newGroupMessage.save();
       const groupMessages = await GroupMessageCollection.find({ group: ID })

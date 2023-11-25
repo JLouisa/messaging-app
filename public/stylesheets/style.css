@@ -196,6 +196,17 @@ div #profileUsername {
   text-align: center;
   font-size: var(--fontSizeXL);
 }
+
+.pendingUsernames {
+  font-size: var(--fontSizeLG);
+}
+
+.pendingRequesteContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .profileBtn {
   font-size: var(--fontSizeMD);
 }
