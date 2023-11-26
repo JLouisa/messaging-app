@@ -8,6 +8,8 @@ header
       input(type="search" name="search" placeholder='search')
     img.searchImg(src="images/search.svg" alt='loupe icon')
   nav
+    a.profile(hx-get="/home" hx-trigger="click" hx-target="main" hx-swap="innerHTML")
+      strong Home
     a.profile(hx-get="/profile" hx-trigger="click" hx-target="main" hx-swap="innerHTML")
       strong Profile
     a.login(href="/login")

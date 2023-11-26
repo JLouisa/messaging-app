@@ -84,9 +84,18 @@ exports.loginPost = [
           .populate("friends")
           .populate("groups")
           .exec();
-        res.render("pages/home", { user, friendlist });
-        // res.status(200).json({ user, friendlist });
+        const tokenUser = {
+          _id: user._id,
+          username: user.username,
+          isAdmin: user.isAdmin,
+          isSuspended: user.isSuspended,
+        };
+        const tokenCookie = jwt.sign({ user: tokenUser }, process.env.SECRET_JWT_KEY, { expiresIn: "168h" });
+        res
+          .cookie("whisperwaveX", tokenCookie, { maxAge: 604800, httpOnly: true })
+          .render("pages/home", { user, friendlist, token: tokenCookie });
       } catch (error) {
+        console.log("Something went wrong with token creation", error);
         res.status(400).json({ error });
       }
     }
