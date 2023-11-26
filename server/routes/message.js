@@ -1,27 +1,27 @@
 const express = require("express");
 const router = express.Router();
-// const snippets = require("../../views/components/snippets");
+const { isAuth, isVerified } = require("../../config/auth");
 const messageController = require("../controller/messageController");
 
 //! Direct Messages
 /* GET messages */
-router.get("/", messageController.messageGet);
+router.get("/", isAuth, isVerified, messageController.messageGet);
 
 //! Group Messages
 /* GET a message */
-router.get("/group", messageController.groupMessage);
+router.get("/group", isAuth, isVerified, messageController.groupMessage);
 
 /* GET a message */
-router.get("/group/:id", messageController.groupMessageIDGet);
+router.get("/group/:id", isAuth, isVerified, messageController.groupMessageIDGet);
 
 /* POST message */
-router.post("/group/:id", messageController.groupMessageIDPost);
+router.post("/group/:id", isAuth, isVerified, messageController.groupMessageIDPost);
 
 /* GET users signup. */
-router.put("/group/:id", messageController.groupMessagePut);
+router.put("/group/:id", isAuth, isVerified, messageController.groupMessagePut);
 
 /* POST users signup. */
-router.delete("/group/:id", messageController.groupMessageDelete);
+router.delete("/group/:id", isAuth, isVerified, messageController.groupMessageDelete);
 
 //! Direct Messages
 /* GET a message */

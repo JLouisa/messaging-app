@@ -3,29 +3,34 @@ const jwt = require("jsonwebtoken");
 module.exports = {
   // Verify token
   isAuth: function (req, res, next) {
-    // Get auth header Value
-    const bearerHeader = req.headers["authorization"];
+    // Get auth cookie Value
+    const cookie = req.headers.cookie;
     // Format of token
-    // Authorization: Bearer <access_token>
-    //Check if bearer is undefined
-    if (typeof bearerHeader !== "undefined") {
+    //Check if cookie is undefined
+    if (typeof cookie !== "undefined") {
       //Forbidden
-      const bearer = bearerHeader.split(" ");
-      const bearerToken = bearer[1];
-      req.token = bearerToken;
+      const token = cookie.slice(13);
+      req.token = token;
+      console.log("send to isVerified");
       return next();
     } else {
-      return res.sendStatus(403);
+      return res.redirect("/login");
     }
   },
   isVerified: function (req, res, next) {
     jwt.verify(req.token, process.env.SECRET_JWT_KEY, { expiresIn: "168h" }, (err, decoded) => {
-      if (err) {
+      if (err || decoded.user.isSuspended === true) {
+        console.log("There was an isVerified error");
         console.error(err);
-        return res.status(404).json({ msg: "Invalid token" });
+        return res.redirect(201, "/login");
       }
-      req.body.isAdmin = decoded.user.isAdmin;
-      req.body.id = decoded.user.id;
+      console.log("send to controller");
+      req.body.user = {
+        _id: decoded.user._id,
+        username: decoded.user.username,
+        isAdmin: decoded.user.isAdmin,
+        isSuspended: decoded.user.isSuspended,
+      };
       next();
     });
   },

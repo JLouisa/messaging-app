@@ -1,24 +1,24 @@
 const express = require("express");
 const router = express.Router();
-// const snippets = require("../../views/components/snippets");
+const { isAuth, isVerified } = require("../../config/auth");
 const groupController = require("../controller/groupController");
 
 /* GET group */
-router.get("/", groupController.groupGet);
+router.get("/", isAuth, isVerified, groupController.groupGet);
 
 /* GET group */
-router.get("/add", groupController.groupAddGet);
+router.get("/add", isAuth, isVerified, groupController.groupAddGet);
 
 /* GET a group */
-router.get("/:id", groupController.groupIDGet);
+router.get("/:id", isAuth, isVerified, groupController.groupIDGet);
 
 /* POST group */
-router.post("/", groupController.groupPost);
+router.post("/", isAuth, isVerified, groupController.groupPost);
 
 /* GET group */
-router.put("/:id", groupController.groupPut);
+router.put("/:id", isAuth, isVerified, groupController.groupPut);
 
 /* POST group */
-router.delete("/:id", groupController.groupDelete);
+router.delete("/:id", isAuth, isVerified, groupController.groupDelete);
 
 module.exports = router;

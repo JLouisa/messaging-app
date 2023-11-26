@@ -238,6 +238,10 @@ div #profileUsername {
     grid-template-areas: "logo search login";
     grid-template-columns: 1fr 1fr 1fr;
   }
+
+  .header2 {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 footer {

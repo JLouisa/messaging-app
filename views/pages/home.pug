@@ -1,29 +1,31 @@
-p.welcomeUser Hi, 
-    strong #{user.username} 
-section.home 
-    div#listSection 
-        div#userDiv
-            div.userPart
-                div
-                    img#userImg(src="images/default_profile.png", alt="profile pic")
-            div.addBtn
-                button.btn(hx-get='/users/add' hx-trigger='click' hx-target="#addDiv" hx-swap="outerHTML") +
-        div#addDiv(hidden=true)
-        div.friendGroupBtns 
-            button.btn(hx-get=`users/friendlist` hx-trigger='click' hx-target="#friendSection" hx-swap="outerHTML") Friends
-             button.btn(hx-get=`/group` hx-trigger='click' hx-target="#friendSection" hx-swap="outerHTML") Groups
-        div#friendSection 
-            each friend in friendlist.friends
-                div.friendContainer(hx-get=`/message/${friend._id}` hx-trigger='click' hx-target="#chatSection" hx-swap="innerHTML")
-                    div.friendProfileImgDiv
-                        img.friendProfileImg(src='images/default_profile.png', alt="profile pic")
-                    p.friendInfo 
-                        span
-                            strong= friend.username
-                        span= friend.createdDate.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-                    p.friendText Text...
-    div#chatSection
-        div.welcomeMessage 
-            p
-                strong WhisperWave 
-                | for everyone!
+extends ../layout-inner
+block content
+    p.welcomeUser Hi, 
+        strong #{user.username} 
+    section.home 
+        div#listSection 
+            div#userDiv
+                div.userPart
+                    div
+                        img#userImg(src="images/default_profile.png", alt="profile pic")
+                div.addBtn
+                    button.btn(hx-get='/users/add' hx-trigger='click' hx-target="#addDiv" hx-swap="outerHTML") +
+            div#addDiv(hidden=true)
+            div.friendGroupBtns 
+                button.btn(hx-get=`users/friendlist` hx-trigger='click' hx-target="#friendSection" hx-swap="outerHTML") Friends
+                button.btn(hx-get=`/group` hx-trigger='click' hx-target="#friendSection" hx-swap="outerHTML") Groups
+            div#friendSection 
+                each friend in friendlist.friends
+                    div.friendContainer(hx-get=`/message/${friend._id}` hx-trigger='click' hx-target="#chatSection" hx-swap="innerHTML")
+                        div.friendProfileImgDiv
+                            img.friendProfileImg(src='images/default_profile.png', alt="profile pic")
+                        p.friendInfo 
+                            span
+                                strong= friend.username
+                            span= friend.createdDate.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+                        p.friendText Text...
+        div#chatSection
+            div.welcomeMessage 
+                p
+                    strong WhisperWave 
+                    | for everyone!

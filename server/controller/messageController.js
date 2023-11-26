@@ -9,7 +9,7 @@ const bcrypt = require("bcryptjs");
 // const reservedUsernames = JSON.parse(fs.readFileSync(__dirname + "/reservedUsernames.json", "utf8")).reservedUsernames;
 
 //? Dev User ID
-const { devUser } = require("../../config/devUser");
+// const { req.body.user._id } = require("../../config/req.body.user._id");
 
 // Direct Messages
 exports.messageGet = asyncHandler(async function (req, res, next) {
@@ -73,7 +73,7 @@ exports.messagePost = [
     // Create and save new message
     try {
       const { useMessage } = creator();
-      const newMessage = useMessage(req.body.text, devUser, ID);
+      const newMessage = useMessage(req.body.text, req.body.user._id, ID);
       await newMessage.save();
     } catch (error) {
       return res.status(400).json({
@@ -164,7 +164,7 @@ exports.groupMessageIDPost = [
     // Create and save new group message
     try {
       const { useGroupMessage } = creator();
-      const user = await UserCollection.findOne({ _id: devUser });
+      const user = await UserCollection.findOne({ _id: req.body.user._id });
       const newGroupMessage = useGroupMessage(req.body.text, user, ID);
       await newGroupMessage.save();
       const groupMessages = await GroupMessageCollection.find({ group: ID })

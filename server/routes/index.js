@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-// const snippets = require("../../views/components/snippets");
+const { isAuth, isVerified } = require("../../config/auth");
 const indexController = require("../controller/indexController");
 
 /* GET users listing. */
 router.get("/", indexController.homeGet);
 
 /* GET users listing. */
-router.get("/home", indexController.home);
+router.get("/home", isAuth, isVerified, indexController.home);
 
 /* GET user login page */
 router.get("/login", indexController.loginGet);
@@ -22,9 +22,9 @@ router.get("/signup", indexController.signupGet);
 router.post("/signup", indexController.signupPost);
 
 /* POST users logout. */
-router.post("/logout", indexController.logoutPost);
+router.get("/logout", indexController.logoutPost);
 
 /* Get user profile. */
-router.get("/profile", indexController.profileGet);
+router.get("/profile", isAuth, isVerified, indexController.profileGet);
 
 module.exports = router;

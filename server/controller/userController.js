@@ -10,7 +10,7 @@ const bcrypt = require("bcryptjs");
 // const reservedUsernames = JSON.parse(fs.readFileSync(__dirname + "/reservedUsernames.json", "utf8")).reservedUsernames;
 
 //? Dev User ID
-const { devUser } = require("../../config/devUser");
+// const { req.body.user._id } = require("../../config/req.body.user._id");
 
 exports.usersGet = asyncHandler(async function (req, res, next) {
   res.send("Users GET");
@@ -39,7 +39,9 @@ exports.usersDelete = asyncHandler(async function (req, res, next) {
 
 // Get friendlist
 exports.usersFriendlistGet = asyncHandler(async function (req, res, next) {
-  const friendlist = await FriendlistCollection.findOne({ createdByUser: devUser }).populate("friends").exec();
+  const friendlist = await FriendlistCollection.findOne({ createdByUser: req.body.user._id })
+    .populate("friends")
+    .exec();
 
   // res.send("<p>Test</p>");
   res.render("components/friendlist", { friendlist });
@@ -78,7 +80,9 @@ exports.usersFriendlistAddPost = [
     }
 
     try {
-      const myFriendlist = await FriendlistCollection.findOne({ createdByUser: devUser }).populate("friends").exec();
+      const myFriendlist = await FriendlistCollection.findOne({ createdByUser: req.body.user._id })
+        .populate("friends")
+        .exec();
 
       const isFriend = myFriendlist.friends.some((item) => item.username === req.body.addNewFriend);
 
@@ -89,13 +93,13 @@ exports.usersFriendlistAddPost = [
         });
       }
 
-      const meTheUser = await UserCollection.findOne({ _id: devUser }).exec();
+      const meTheUser = await UserCollection.findOne({ _id: req.body.user._id }).exec();
       const userFriend = await UserCollection.findOne({ username: req.body.addNewFriend.toLowerCase() }).exec();
       const userFriendlist = await FriendlistCollection.findOne({ createdByUser: userFriend._id })
         .populate("pending")
         .exec();
 
-      const isPending = userFriendlist.pending.some((item) => item._id === devUser);
+      const isPending = userFriendlist.pending.some((item) => item._id === req.body.user._id);
 
       if (!isPending) {
         userFriendlist.pending.push(meTheUser);
@@ -115,7 +119,9 @@ exports.usersFriendlistAddPost = [
 
 //Get friendlist in profile
 exports.usersProfileFriendlistGet = asyncHandler(async function (req, res, next) {
-  const friendlist = await FriendlistCollection.findOne({ createdByUser: devUser }).populate("friends").exec();
+  const friendlist = await FriendlistCollection.findOne({ createdByUser: req.body.user._id })
+    .populate("friends")
+    .exec();
 
   // res.send("<p>Test</p>");
   res.render("components/profileFriendsList", { friendlist });
@@ -124,7 +130,9 @@ exports.usersProfileFriendlistGet = asyncHandler(async function (req, res, next)
 // Get pending list in profile
 exports.usersFriendlistPendingGet = asyncHandler(async function (req, res, next) {
   try {
-    const pendingList = await FriendlistCollection.findOne({ createdByUser: devUser }).populate("pending").exec();
+    const pendingList = await FriendlistCollection.findOne({ createdByUser: req.body.user._id })
+      .populate("pending")
+      .exec();
     res.render("components/pendingList", { pendingList: pendingList });
   } catch (error) {
     console.log("Something went wrong getting the pending list", error);
@@ -142,12 +150,12 @@ exports.usersFriendlistIDPut = asyncHandler(async function (req, res, next) {
     // session.startTransaction();
     await session.withTransaction(async () => {
       const [myUser, theUser] = await Promise.all([
-        UserCollection.findOne({ _id: devUser }).session(session),
+        UserCollection.findOne({ _id: req.body.user._id }).session(session),
         UserCollection.findOne({ _id: ID }).session(session),
       ]);
 
       const [myFriendlist, userFriendlist] = await Promise.all([
-        FriendlistCollection.findOne({ createdByUser: devUser }).populate("pending").session(session).exec(),
+        FriendlistCollection.findOne({ createdByUser: req.body.user._id }).populate("pending").session(session).exec(),
         FriendlistCollection.findOne({ createdByUser: ID }).populate("pending").session(session).exec(),
       ]);
 
@@ -195,7 +203,7 @@ exports.usersFriendlistIDPut = asyncHandler(async function (req, res, next) {
 exports.usersFriendlistDelete = asyncHandler(async function (req, res, next) {
   const ID = req.params.id;
   try {
-    const userFriendlist = await FriendlistCollection.findOne({ createdByUser: devUser });
+    const userFriendlist = await FriendlistCollection.findOne({ createdByUser: req.body.user._id });
     const newPendingList = userFriendlist.pending.filter((friend) => {
       return friend._id.toString() !== ID;
     });

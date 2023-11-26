@@ -10,16 +10,25 @@ const jwt = require("jsonwebtoken");
 // const reservedUsernames = JSON.parse(fs.readFileSync(__dirname + "/reservedUsernames.json", "utf8")).reservedUsernames;
 
 //? Dev User ID
-const { devUser } = require("../../config/devUser");
+// const { req.body.user._id } = require("../../config/req.body.user._id");
 
 //! Home page
 exports.homeGet = asyncHandler(async function (req, res, next) {
-  res.render("pages/login", { title: "Welcome" });
+  res.redirect("/home");
 });
 
 //! Home page
 exports.home = asyncHandler(async function (req, res, next) {
-  res.render("pages/home", { title: "Hompage" });
+  try {
+    const friendlist = await FriendlistCollection.findOne({ createdByUser: req.body.user._id })
+      .populate("friends")
+      .populate("groups")
+      .exec();
+    res.render("pages/home", { user: req.body.user, friendlist });
+  } catch (error) {
+    console.log("Something went wrong with token creation", error);
+    res.status(400).json({ error });
+  }
 });
 
 //! Home page
@@ -93,7 +102,7 @@ exports.loginPost = [
         const tokenCookie = jwt.sign({ user: tokenUser }, process.env.SECRET_JWT_KEY, { expiresIn: "168h" });
         res
           .cookie("whisperwaveX", tokenCookie, { maxAge: 604800, httpOnly: true })
-          .render("pages/home", { user, friendlist, token: tokenCookie });
+          .render("pages/home", { user, friendlist });
       } catch (error) {
         console.log("Something went wrong with token creation", error);
         res.status(400).json({ error });
@@ -101,6 +110,27 @@ exports.loginPost = [
     }
   }),
 ];
+
+//! Home page
+exports.logoutPost = asyncHandler(async function (req, res, next) {
+  res.cookie("whisperwaveX", "", { maxAge: 0, httpOnly: true }).redirect("/login");
+});
+
+//! Profile
+exports.profileGet = asyncHandler(async function (req, res, next) {
+  try {
+    const [user, friendlist] = await Promise.all([
+      UserCollection.findOne({ _id: req.body.user._id }).exec(),
+      FriendlistCollection.findOne({ createdByUser: req.body.user._id })
+        .populate("friends")
+        .sort({ friends: 1 })
+        .exec(),
+    ]);
+    res.render("pages/profile", { user, friendlist });
+  } catch (error) {
+    console.log("somehint went wrong getting friendlist", { error });
+  }
+});
 
 //! Home page
 exports.signupGet = asyncHandler(async function (req, res, next) {
@@ -176,25 +206,3 @@ exports.signupPost = [
     }
   }),
 ];
-
-//! Home page
-exports.logoutPost = asyncHandler(async function (req, res, next) {
-  res.send("logout POST");
-});
-
-//! Profile
-exports.profileGet = asyncHandler(async function (req, res, next) {
-  try {
-    const [user, friendlist] = await Promise.all([
-      UserCollection.findOne({ _id: devUser }).exec(),
-      FriendlistCollection.findOne({ createdByUser: devUser }).populate("friends").sort({ friends: 1 }).exec(),
-    ]);
-    // console.log(`user`);
-    // console.log(user);
-    // console.log(`friendlist`);
-    // console.log(friendlist);
-    res.render("pages/profile", { user, friendlist });
-  } catch (error) {
-    console.log("somehint went wrong getting friendlist", { error });
-  }
-});

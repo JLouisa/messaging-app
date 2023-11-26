@@ -1,47 +1,48 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controller/userController");
+const { isAuth, isVerified } = require("../../config/auth");
 
 /* GET all users */
-router.get("/", userController.usersGet);
+router.get("/", isAuth, isVerified, userController.usersGet);
 
 /* GET add users */
-router.get("/add", userController.userAddGet);
+router.get("/add", isAuth, isVerified, userController.userAddGet);
 
 /* GET cancel add users */
-router.get("/cancel", userController.userCancelGet);
+router.get("/cancel", isAuth, isVerified, userController.userCancelGet);
 
 /* DELETE user */
-router.delete("/:id", userController.usersDelete);
+router.delete("/:id", isAuth, isVerified, userController.usersDelete);
 
 //Friendlist
 
 /* GET user friendlist*/
-router.get("/friendlist", userController.usersFriendlistGet);
+router.get("/friendlist", isAuth, isVerified, userController.usersFriendlistGet);
 
 /* GET user friendlist in Profile */
-router.get("/friendlist/profile", userController.usersProfileFriendlistGet);
+router.get("/friendlist/profile", isAuth, isVerified, userController.usersProfileFriendlistGet);
 
 /* GET user */
-router.get("/friendlist/add", userController.usersFriendlistAddGet);
+router.get("/friendlist/add", isAuth, isVerified, userController.usersFriendlistAddGet);
 
 /* GET user friend request */
-router.get("/friendlist/pending", userController.usersFriendlistPendingGet);
+router.get("/friendlist/pending", isAuth, isVerified, userController.usersFriendlistPendingGet);
 
 /* POST user */
-router.post("/friendlist/add", userController.usersFriendlistAddPost);
+router.post("/friendlist/add", isAuth, isVerified, userController.usersFriendlistAddPost);
 
 /* PUT user */
-router.put("/friendlist/:id", userController.usersFriendlistIDPut);
+router.put("/friendlist/:id", isAuth, isVerified, userController.usersFriendlistIDPut);
 
 /* DELETE user */
-router.delete("/friendlist/pending/:id", userController.usersFriendlistDelete);
+router.delete("/friendlist/pending/:id", isAuth, isVerified, userController.usersFriendlistDelete);
 
 // User
 /* GET all users */
-router.get("/:id", userController.usersIDGet);
+router.get("/:id", isAuth, isVerified, userController.usersIDGet);
 
 /* PUT user info change */
-router.put("/:id", userController.usersPut);
+router.put("/:id", isAuth, isVerified, userController.usersPut);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 extends ../layout
-block content
+block inner
     section#loginSection
         h1= title
         if errors && errors.length > 0    
@@ -13,4 +13,3 @@ block content
                 label(for="password") Password:
                 input(type="password" name="password" id="password" value="Apple" placeholder="password")
                 input(type='submit' value='Log in' class='btn')
-
