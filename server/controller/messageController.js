@@ -100,7 +100,7 @@ exports.messagePost = [
         .populate("userReceiver")
         .sort({ createdDate: 1 })
         .exec();
-      return res.render("components/chatMessages", { user, receiver, messages });
+      return res.render("components/chatMessages", { user: req.body.user, receiver, messages });
     } catch (error) {
       console.log(error);
       return res.send(error);
