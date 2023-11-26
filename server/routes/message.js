@@ -25,15 +25,15 @@ router.delete("/group/:id", isAuth, isVerified, messageController.groupMessageDe
 
 //! Direct Messages
 /* GET a message */
-router.get("/:id", messageController.messageIDGet);
+router.get("/:id", isAuth, isVerified, messageController.messageIDGet);
 
 /* POST a message */
-router.post("/:id", messageController.messagePost);
+router.post("/:id", isAuth, isVerified, messageController.messagePost);
 
 /* GET users signup. */
-router.put("/:id", messageController.messagePut);
+router.put("/:id", isAuth, isVerified, messageController.messagePut);
 
 /* POST users signup. */
-router.delete("/:id", messageController.messageDelete);
+router.delete("/:id", isAuth, isVerified, messageController.messageDelete);
 
 module.exports = router;

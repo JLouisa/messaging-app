@@ -13,7 +13,7 @@ router.get("/add", isAuth, isVerified, userController.userAddGet);
 router.get("/cancel", isAuth, isVerified, userController.userCancelGet);
 
 /* DELETE user */
-router.delete("/:id", isAuth, isVerified, userController.usersDelete);
+// router.delete("/:id", isAuth, isVerified, userController.usersDelete);
 
 //Friendlist
 
@@ -44,5 +44,8 @@ router.get("/:id", isAuth, isVerified, userController.usersIDGet);
 
 /* PUT user info change */
 router.put("/:id", isAuth, isVerified, userController.usersPut);
+
+/* PUT user info change */
+router.delete("/unfriend/:id", isAuth, isVerified, userController.usersUnfriendDelete);
 
 module.exports = router;

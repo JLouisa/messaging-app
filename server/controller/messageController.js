@@ -26,7 +26,7 @@ exports.messageGet = asyncHandler(async function (req, res, next) {
 exports.messageIDGet = asyncHandler(async function (req, res, next) {
   const ID = req.params.id;
   try {
-    const user = await UserCollection.findOne({ username: "adamthefirst" }).exec();
+    const user = await UserCollection.findOne({ _id: req.body.user._id }).exec();
     const receiver = await UserCollection.findOne({ _id: ID }).exec();
 
     // Combine queries using $or operator
@@ -86,14 +86,14 @@ exports.messagePost = [
 
     // Search up message
     try {
-      const user = await UserCollection.findOne({ username: "adamthefirst" }).exec();
+      // const user = await UserCollection.findOne({ _id: req.body.user._id }).exec();
       const receiver = await UserCollection.findOne({ _id: ID }).exec();
 
       // Combine queries using $or operator
       const messages = await MessageCollection.find({
         $or: [
-          { createdByUser: user._id, userReceiver: ID },
-          { createdByUser: ID, userReceiver: user._id },
+          { createdByUser: req.body.user._id, userReceiver: ID },
+          { createdByUser: ID, userReceiver: req.body.user._id },
         ],
       })
         .populate("createdByUser")

@@ -1,7 +1,10 @@
 div#profileList
-    div#profileFriendslist Friends list: 
-        each friend in friendlist.friends
-            div.profileFriendContrainer
-                span 
-                    strong= friend.username
-                button.btn.btn2(hx-put=`/user/${friend._id}/unfriend`) unfriend
+    if friendlist && friendlist.friends.length > 0
+        div#profileFriendslist Friends list: 
+            each friend in friendlist.friends
+                div.profileFriendContrainer
+                    span 
+                        strong= friend.username
+                    button.btn.btn2(hx-delete=`/users/unfriend/${friend._id}` hx-target="#profileList" hx-swap="outerHTML" hx-trigger='click') unfriend
+    else 
+        p You haven't add any friends added yet

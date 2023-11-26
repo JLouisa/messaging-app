@@ -33,8 +33,45 @@ exports.usersPut = asyncHandler(async function (req, res, next) {
   res.send("User PUT");
 });
 
-exports.usersDelete = asyncHandler(async function (req, res, next) {
-  res.send("User DELETE");
+exports.usersUnfriendDelete = asyncHandler(async function (req, res, next) {
+  const ID = req.params.id;
+  try {
+    // Start Atomic Operations
+    const session = await mongoose.startSession();
+    // session.startTransaction();
+    await session.withTransaction(async () => {
+      const [currentUserFriendslist, friendFriendslist] = await Promise.all([
+        FriendlistCollection.findOne({ createdByUser: req.body.user._id }).populate("friends").session(session).exec(),
+        FriendlistCollection.findOne({ createdByUser: ID }).populate("friends").session(session).exec(),
+      ]);
+
+      const newUserFriendslist = currentUserFriendslist.friends.filter((friend) => {
+        return friend._id.toString() !== ID;
+      });
+
+      const newFriendFriendslist = friendFriendslist.friends.filter((friend) => {
+        return friend.username !== req.body.user.username;
+      });
+
+      // Update user friendlist
+      currentUserFriendslist.friends = [...newUserFriendslist];
+
+      // Update friend's friendlist
+      friendFriendslist.friends = [...newFriendFriendslist];
+
+      // Save to database
+      await currentUserFriendslist.save();
+      await friendFriendslist.save();
+
+      res.render("components/profileFriendsList", { friendlist: currentUserFriendslist });
+    });
+
+    // Commit and end the transaction
+    await session.commitTransaction();
+    session.endSession();
+  } catch (error) {
+    console.log("Someting went wrong with getting friendslist", error);
+  }
 });
 
 // Get friendlist

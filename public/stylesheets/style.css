@@ -259,9 +259,20 @@ footer img {
 
 /* ==================Main================== */
 #loginSection {
-  margin: 1em auto;
-  width: 300px;
-  justify-self: center;
+  width: 400px;
+  margin: 2em auto;
+  padding: 4em;
+  border-radius: var(--borderRadius);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.loginTitle {
+  margin: 1em 0;
+  text-align: center;
+}
+
+#logoLogin {
+  text-align: center;
 }
 
 #loginValidationErrors,

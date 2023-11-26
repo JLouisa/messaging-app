@@ -9,10 +9,4 @@ section.profileSection
             button.btn.btn2.profileBtn(hx-get="/users/friendlist/profile" hx-target="#profileList" hx-trigger="click" hx-swap="outerHTML") Friends list
             button.btn.btn2.profileBtn(hx-get="/users/friendlist/pending" hx-target="#profileList" hx-trigger="click" hx-swap="outerHTML") Pending requests
         br
-        div#profileList
-            div#profileFriendslist Friends list: 
-                each friend in friendlist.friends
-                    div.profileFriendContrainer
-                        span 
-                            strong= friend.username
-                        button.btn.btn2(hx-put=`/user/${friend._id}/unfriend`) unfriend
+        include ../components/profileFriendsList.pug
