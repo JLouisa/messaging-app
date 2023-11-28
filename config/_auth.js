@@ -14,10 +14,7 @@ module.exports = {
       console.log("send to isVerified");
       return next();
     } else {
-      // return res.status(401).json({ error: "Unauthorized - No token provided" });
-
-      // No token provided, initiate client-side redirect to /login
-      return res.set("HX-Redirect", "http://localhost:3000/login").status(401).end();
+      return res.redirect("/login");
     }
   },
   isVerified: function (req, res, next) {
@@ -25,8 +22,7 @@ module.exports = {
       if (err || decoded.user.isSuspended === true) {
         console.log("There was an isVerified error");
         console.error(err);
-        // return res.redirect(201, "/login");
-        return res.status(401).json({ error: "Forbidden - Invalid or expired token" });
+        return res.redirect(201, "/login");
       }
       console.log("send to controller");
       req.body.user = {
