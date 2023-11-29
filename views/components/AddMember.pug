@@ -1,0 +1,17 @@
+div#chatMessages
+    if errors && errors.length > 0
+        div.errorMsg
+            each error in errors 
+                div - #{error.msg}
+    if succes
+        div.succesMsg
+            div - #{succes.msg}
+    form#newMembers(hx-post=`/group/add/member/${groupID}` hx-target='#chatMessages' hx-swap="outerHTML") 
+        div
+            label(for="member") Add New Member
+            br
+            input.textInput(type='text' name="member" id="member" placeholder="Type a message")
+        div
+            button.btn(type="Submit") Add
+
+div.chatInputField(hx-swap-oob=true)

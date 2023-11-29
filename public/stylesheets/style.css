@@ -281,6 +281,10 @@ footer img {
   color: crimson;
 }
 
+.succesMsg {
+  color: green;
+}
+
 .home {
   display: grid;
   grid-template-rows: 1fr;
@@ -427,20 +431,22 @@ footer img {
 
 #chatSection {
   display: grid;
-  max-height: calc(700px + 3rem);
-  grid-template-rows: 700px 3rem;
+  max-height: calc(700px + 3rem - 2rem);
+  grid-template-rows: 2rem 700px 3rem;
   grid-template-columns: 1fr;
   border: 1px solid black;
 }
 
+.addMember {
+  justify-self: end;
+  border: none;
+}
+
 #chatMessages {
   overflow-y: auto;
-  /* border: 2px solid black; */
-  grid-row: 1/2;
+  grid-row: 2/3;
   grid-column: 1/2;
   padding: var(--paddingBase);
-  /* grid-auto-flow: row dense; */
-  /* Hide the scrollbar when not in use */
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
 }
@@ -464,7 +470,7 @@ footer img {
 
 .chatInputField {
   align-self: end;
-  grid-row: 2/3;
+  grid-row: 3/4;
   grid-column: 1/2;
 }
 

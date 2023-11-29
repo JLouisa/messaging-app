@@ -2,6 +2,8 @@ const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 const MessageCollection = require("../model/messageModel");
 const GroupCollection = require("../model/groupModel");
+const UserCollection = require("../model/userModel");
+const FriendlistCollection = require("../model/friendlistModel");
 const bcrypt = require("bcryptjs");
 const { creator } = require("../../config/creator");
 const { useGroup } = creator();
@@ -51,6 +53,89 @@ exports.groupAddPost = [
       console.error("Error adding friend:", error);
       return res.render("components/groupList", {
         username: req.body.addNewFriend,
+        errors: [{ msg: "Something went wrong. Please try again" }],
+      });
+    }
+  }),
+];
+
+exports.groupAddMemberIDGet = asyncHandler(async function (req, res, next) {
+  const ID = req.params.id;
+  return res.render("components/AddMember", { groupID: ID });
+});
+
+exports.groupAddMemberIDPost = [
+  body("member")
+    .notEmpty()
+    .withMessage("No Username given")
+    .trim()
+    .isLength({ min: 3, max: 50 })
+    .withMessage("Username must be between 3 and 50 characters")
+    .custom(async (value, { req }) => {
+      try {
+        const friendlist = await FriendlistCollection.findOne({ createdByUser: req.body.user._id })
+          .populate("friends")
+          .exec();
+
+        const isFriend = friendlist.friends.some((item) => item.username === value.toLowerCase());
+
+        if (!isFriend) {
+          throw new ValidationError("You are not friends");
+        }
+      } catch (error) {
+        if (error instanceof ValidationError) {
+          throw error;
+        } else {
+          throw new ValidationError("An unexpected error occurred. Please try again later.");
+        }
+      }
+    })
+    .withMessage("You are not friends")
+    .custom(async (value, { req }) => {
+      try {
+        const group = await GroupCollection.findOne({ _id: req.params.id }).populate("members").exec();
+        const isGroup = group.members.some((item) => item.username === value.toLowerCase());
+
+        if (isGroup) {
+          throw new ValidationError("Friend is already in the group");
+        }
+      } catch (error) {
+        if (error instanceof ValidationError) {
+          throw error;
+        } else {
+          throw new ValidationError("An unexpected error occurred. Please try again later.");
+        }
+      }
+    })
+    .withMessage("Friend is already in the group")
+    .escape(),
+
+  asyncHandler(async function (req, res, next) {
+    const groupID = req.params.id;
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).render("components/AddMember", {
+        groupID,
+        username: req.body.member,
+        errors: errors.array(),
+      });
+    }
+
+    try {
+      const user = await UserCollection.findOne({ username: req.body.member.toLowerCase() });
+      const group = await GroupCollection.findOne({ createdByUser: req.body.user._id });
+      group.members.push(user._id);
+      await group.save();
+      return res.render("components/AddMember", {
+        username: req.body.member,
+        succes: { msg: `Friend added to group` },
+      });
+    } catch (error) {
+      console.error("Error adding friend:", error);
+
+      return res.render("components/AddMember", {
+        username: req.body.member,
         errors: [{ msg: "Something went wrong. Please try again" }],
       });
     }

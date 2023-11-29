@@ -1,6 +1,6 @@
 div#friendSection
     each group in groups
-        div.friendContainer(hx-get=`/message/group/${group._id}` hx-trigger='click' hx-target="#chatSection" hx-swap="innerHTML")
+        div.friendContainer(hx-get=`/message/group/${group._id}` hx-trigger='click' hx-target="#chatSection" hx-swap="outerHTML")
             div.friendProfileImgDiv
                 img.friendProfileImg(src='images/group_profile.png', alt="profile pic")
             p.friendInfo 

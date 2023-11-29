@@ -11,13 +11,12 @@ module.exports = {
       //Forbidden
       const token = cookie.slice(13);
       req.token = token;
-      console.log("send to isVerified");
       return next();
     } else {
       // return res.status(401).json({ error: "Unauthorized - No token provided" });
 
       // No token provided, initiate client-side redirect to /login
-      return res.set("HX-Redirect", "http://localhost:3000/login").status(401).end();
+      return res.set("HX-Redirect", "/login").status(401).end();
     }
   },
   isVerified: function (req, res, next) {
@@ -28,7 +27,6 @@ module.exports = {
         // return res.redirect(201, "/login");
         return res.render("components/login", { notLoggedIn: true });
       }
-      console.log("send to controller");
       req.body.user = {
         _id: decoded.user._id,
         username: decoded.user.username,

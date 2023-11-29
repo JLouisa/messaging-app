@@ -1,22 +1,24 @@
-div#chatMessages
-    if messages && messages.length > 0
-        each message in messages
-            div.chatBubble
-                p= message.createdByUser.username
-                p= message.text
-                p= message.createdDate.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-    else 
-        p No messages in #{group.name}
-div.chatInputField
-        form.chatForm(hx-post=`/message/group/${groupID}` hx-target='#chatSection' hx-swap="innerHTML") 
-            div
-                textarea.textInput(name="text", cols="30", rows="1" placeholder="Type a message")
-            div
-                button.btn(type="Submit") Send
-
-script.
-    async function loadMessages() {
-        const chatMessages = document.getElementById('chatMessages')
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-    loadMessages();
+div#chatSection
+    div.addMember 
+        button.btn(hx-get=`/group/add/member/${groupID}` hx-target='#chatMessages' hx-swap="outerHTML") + Member
+    div#chatMessages
+        if messages && messages.length > 0
+            each message in messages
+                div.chatBubble
+                    p= message.createdByUser.username
+                    p= message.text
+                    p= message.createdDate.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+        else 
+            p No messages in #{group.name}
+    div.chatInputField
+            form.chatForm(hx-post=`/message/group/${groupID}` hx-target='#chatSection' hx-swap="outerHTML") 
+                div
+                    textarea.textInput(name="text", cols="30", rows="1" placeholder="Type a message")
+                div
+                    button.btn(type="Submit") Send
+    script.
+        async function loadMessages() {
+            const chatMessages = document.getElementById('chatMessages')
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        loadMessages();

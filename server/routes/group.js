@@ -13,6 +13,12 @@ router.get("/add", isAuth, isVerified, groupController.groupAddGet);
 router.post("/add", isAuth, isVerified, groupController.groupAddPost);
 
 /* GET a group */
+router.get("/add/member/:id", isAuth, isVerified, groupController.groupAddMemberIDGet);
+
+/* POST new member group */
+router.post("/add/member/:id", isAuth, isVerified, groupController.groupAddMemberIDPost);
+
+/* GET a group */
 router.get("/:id", isAuth, isVerified, groupController.groupIDGet);
 
 /* POST group */
