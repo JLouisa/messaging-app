@@ -16,6 +16,7 @@ module.exports = {
       // return res.status(401).json({ error: "Unauthorized - No token provided" });
 
       // No token provided, initiate client-side redirect to /login
+      // return res.redirect(201, "/login");
       return res.set("HX-Redirect", "/login").status(401).end();
     }
   },

@@ -10,6 +10,7 @@
   --black: #1c1c1c;
   --red: #b30000;
   --greyLight: #e4e4e4;
+  --blue: darkgreen;
 
   /* Default font color for text */
   --fontSizeBase: 1rem;
@@ -52,7 +53,7 @@ select {
 }
 
 .btn {
-  background-color: var(--black);
+  background-color: var(--blue);
   border: none;
   color: white;
   padding: 16px 32px;
@@ -470,22 +471,71 @@ footer img {
 
 .chatInputField {
   align-self: end;
-  grid-row: 3/4;
+  grid-row: 2/3;
   grid-column: 1/2;
-}
-
-.chatForm {
-  border: 1px solid blue;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.chatForm textarea {
-  border: none;
-}
-
 .clickableLinks {
   text-decoration: underline;
   color: blue;
+}
+
+div.chatInputField {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  background: #f6f8ff;
+}
+
+textarea.textInput {
+  align-self: center;
+  overflow-y: hidden;
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #3498db;
+  border-radius: 4px;
+  resize: none;
+  outline: none;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+  height: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  width: clamp(200px, 50%, 700px);
+  max-width: 100%;
+  font-size: 2rem;
+  line-height: 22px;
+  color: #404660;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px var(--border-color, #e1e6f9), 0 0 0 3px var(--focus-color, transparent);
+}
+
+textarea.textInput:focus {
+  border-color: #2980b9;
+  --focus-color: #eceffc;
+}
+
+button.btn {
+  margin-left: 10px;
+  padding: 8px 15px;
+  background-color: darkgreen;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.btn:hover {
+  background-color: #2980b9;
+}
+
+body {
+  background: #f6f8ff;
 }

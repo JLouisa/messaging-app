@@ -14,7 +14,7 @@ const jwt = require("jsonwebtoken");
 
 //! Home page
 exports.homeGet = asyncHandler(async function (req, res, next) {
-  res.redirect("/home");
+  res.redirect("/login");
 });
 
 //! Home page
