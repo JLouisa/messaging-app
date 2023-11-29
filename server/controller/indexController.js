@@ -84,8 +84,8 @@ exports.loginPost = [
 
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values/error messages.
-      const newErrors = errors.array();
-      return res.render("pages/loginError", { errors: newErrors, user: req.body.username });
+      // const newErrors = errors.array();
+      return res.render("pages/login", { errors: errors.array(), user: req.body.username, title: "Log in" });
     } else {
       try {
         const user = await UserCollection.findOne({ username: req.body.username.toLowerCase() }).exec();
@@ -134,7 +134,7 @@ exports.profileGet = asyncHandler(async function (req, res, next) {
 
 //! Home page
 exports.signupGet = asyncHandler(async function (req, res, next) {
-  res.render("pages/signup", { title: "Sign-up Page" });
+  res.render("pages/signup", { title: "Sign-up" });
 });
 
 //! Validate Sign Up post
@@ -192,17 +192,11 @@ exports.signupPost = [
 
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values/error messages.
-      res.status(400).json({
-        data: {
-          username: req.body.username,
-          errors: errors.array(),
-        },
-      });
-      return;
+      return res.render("pages/signup", { errors: errors.array(), user: req.body.username, title: "Sign up" });
     } else {
       const { useUser } = creator();
       (await useUser(req.body.username, req.body.password)).save().catch((err) => console.error(err));
-      res.status(201).json({ message: "User succesfully created" });
+      res.redirect("/login");
     }
   }),
 ];

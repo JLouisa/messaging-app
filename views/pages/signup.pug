@@ -1,1 +1,22 @@
-h1= title
+extends ../layout
+block inner
+    section#loginSection(hx-swap-oob=true)
+        h1#logoLogin
+            span.logoPart1 Whisper
+            span.logoPart2 Wave
+        h2.loginTitle= title
+        if errors && errors.length > 0    
+            div#loginValidationErrors
+                each error in errors 
+                    div - #{error.msg}
+        div
+            form(action="", hx-post="/signup" hx-target='#loginSection' hx-swap="outerHTML")
+                label(for="username") Username:
+                input(type="text" name="username" id="username" placeholder="username")
+                label(for="password") Password:
+                input(type="password" name="password" id="password" placeholder="password")
+                label(for="confirmPassword") Confirm Password:
+                input(type="password" name="confirmPassword" id="confirmPassword" placeholder="repeat password")
+                input(type='submit' value='Sign Up' class='btn')
+        p Already have an account?  
+            a.clickableLinks(href="/login") Log in

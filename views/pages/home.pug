@@ -2,7 +2,7 @@ extends ../layout-inner
 block content
     p.welcomeUser Hi, 
         strong #{user.username} 
-    section.home 
+    section.home(hx-push-url="/home")
         div#listSection 
             div#userDiv
                 div.userPart
@@ -15,17 +15,37 @@ block content
                 button.btn(hx-get=`users/friendlist` hx-trigger='click' hx-target="#friendSection" hx-swap="outerHTML") Friends
                 button.btn(hx-get=`/group` hx-trigger='click' hx-target="#friendSection" hx-swap="outerHTML") Groups
             div#friendSection 
-                each friend in friendlist.friends
-                    div.friendContainer(hx-get=`/message/${friend._id}` hx-trigger='click' hx-target="#chatSection" hx-swap="innerHTML")
-                        div.friendProfileImgDiv
-                            img.friendProfileImg(src='images/default_profile.png', alt="profile pic")
-                        p.friendInfo 
-                            span
-                                strong= friend.username
-                            span= friend.createdDate.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-                        p.friendText Text...
+                if friendlist && friendlist.friends
+                    each friend in friendlist.friends
+                        div.friendContainer(hx-get=`/message/${friend._id}` hx-trigger='click' hx-target="#chatSection" hx-swap="innerHTML")
+                            div.friendProfileImgDiv
+                                img.friendProfileImg(src='images/default_profile.png', alt="profile pic")
+                            p.friendInfo 
+                                span
+                                    strong= friend.username
+                                span= friend.createdDate.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+                            p.friendText Text...
+                else 
+                    div.noFriends No friends added yet
         div#chatSection
             div.welcomeMessage 
                 p
                     strong WhisperWave 
                     | for everyone!
+
+    script.
+        function handleHtmxAfterSettle() {
+            console.log("HTMX hello");
+            
+            // Replace the console.log with your logic to push a new URL
+            //- window.location.href = "/home";
+            // Replace the current URL with "/home"
+            window.history.pushState(null, null, "/home");
+
+
+            // Remove the event listener after it has fired
+            document.body.removeEventListener('htmx:afterSettle', handleHtmxAfterSettle);
+        }
+
+        // Add the event listener
+        document.body.addEventListener('htmx:afterSettle', handleHtmxAfterSettle(), true);
