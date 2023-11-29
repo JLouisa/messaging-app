@@ -1,16 +1,28 @@
-header
-  a(href="/")
-    h1.logo
-      span.logoPart1 Whisper
-      span.logoPart2 Wave
-  div.searchDiv
-    form(action="" method="post") 
-      input(type="search" name="search" placeholder='search')
-    img.searchImg(src="images/search.svg" alt='loupe icon')
-  nav
-    a.profile(href="/home")
-      strong Home
-    a.profile(hx-get="/profile" hx-trigger="click" hx-target="main" hx-swap="innerHTML")
-      strong Profile
-    a.login(href="/logout")
-      strong Logout
+if notLoggedIn
+  header
+    a(href="/")
+      h1.logo
+        span.logoPart1 Whisper
+        span.logoPart2 Wave
+    nav
+      a.profile(href="/home")
+        strong Home
+      a.login(href="/logout")
+        strong Login
+else
+  header
+    a(href="/")
+      h1.logo
+        span.logoPart1 Whisper
+        span.logoPart2 Wave
+    div.searchDiv
+      form(action="" method="post") 
+        input(type="search" name="search" placeholder='search')
+      img.searchImg(src="images/search.svg" alt='loupe icon')
+    nav
+      a.profile(href="/home")
+        strong Dashboard
+      a.profile(hx-get="/profile" hx-trigger="click" hx-target="main" hx-swap="innerHTML")
+        strong Profile
+      a.login(href="/logout")
+        strong Logout

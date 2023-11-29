@@ -26,7 +26,7 @@ module.exports = {
         console.log("There was an isVerified error");
         console.error(err);
         // return res.redirect(201, "/login");
-        return res.status(401).json({ error: "Forbidden - Invalid or expired token" });
+        return res.render("components/login", { notLoggedIn: true });
       }
       console.log("send to controller");
       req.body.user = {

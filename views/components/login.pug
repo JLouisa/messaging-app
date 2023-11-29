@@ -1,0 +1,16 @@
+section#loginSection(hx-swap-oob=true)
+    h1#logoLogin
+        span.logoPart1 Whisper
+        span.logoPart2 Wave
+    h2.loginTitle= title
+    if errors && errors.length > 0    
+        div#loginValidationErrors
+            each error in errors 
+                div - #{error.msg}
+    div
+        form(action="", hx-post="/login" hx-push-url="/home" hx-target='#loginSection' hx-swap="outerHTML")
+            label(for="username") Username:
+            input(type="text" name="username" id="username" value="adamthefirst" placeholder="username" autocomplete="username")
+            label(for="password") Password:
+            input(type="password" name="password" id="password" value="Apple" placeholder="password")
+            input(type='submit' value='Log in' class='btn')
