@@ -1,12 +1,12 @@
 div#chatMessages
-    if messages.length > 0
+    if messages && messages.length > 0
         each message in messages
             div.chatBubble
                 p= message.createdByUser.username
                 p= message.text
                 p= message.createdDate.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
     else 
-        p No messages in #{message.group.name}
+        p No messages in #{group.name}
 div.chatInputField
         form.chatForm(hx-post=`/message/group/${groupID}` hx-target='#chatSection' hx-swap="innerHTML") 
             div

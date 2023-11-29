@@ -6,8 +6,11 @@ const groupController = require("../controller/groupController");
 /* GET group */
 router.get("/", isAuth, isVerified, groupController.groupGet);
 
-/* GET group */
+/* GET add group */
 router.get("/add", isAuth, isVerified, groupController.groupAddGet);
+
+/* POST add group */
+router.post("/add", isAuth, isVerified, groupController.groupAddPost);
 
 /* GET a group */
 router.get("/:id", isAuth, isVerified, groupController.groupIDGet);

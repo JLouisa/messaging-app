@@ -1,0 +1,12 @@
+div#addDiv
+    if errors && errors.length > 0
+        div.errorMsg
+            each error in errors 
+                div - #{error.msg}
+    form.addFriendForm(hx-post="/group/add" hx-target='#friendSection' hx-swap="outerHTML") 
+        input.inputAddFriend(type="text" name="addNewGroup" id="addNewGroup" placeholder="Group Name"  value=group ? group : "")
+        div
+            button.btn#addFriendBtn(type="submit")
+                strong Create Group
+            button.btn#cancelFriendBtn(hx-get="/users/cancel" hx-target='#addDiv' hx-swap="outerHTML")
+                strong Cancel

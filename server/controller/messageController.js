@@ -3,6 +3,7 @@ const { body, validationResult } = require("express-validator");
 const MessageCollection = require("../model/messageModel");
 const GroupMessageCollection = require("../model/groupMessageModel");
 const UserCollection = require("../model/userModel");
+const GroupCollection = require("../model/groupModel");
 const { creator } = require("../../config/creator");
 const bcrypt = require("bcryptjs");
 // const fs = require("fs");
@@ -125,12 +126,15 @@ exports.groupMessage = asyncHandler(async function (req, res, next) {
 exports.groupMessageIDGet = asyncHandler(async function (req, res, next) {
   const ID = req.params.id;
   try {
-    const groupMessage = await GroupMessageCollection.find({ group: ID })
-      .populate("createdByUser")
-      .populate("group")
-      .sort({ createdDate: 1 })
-      .exec();
-    res.render("components/GroupChatMessages", { messages: groupMessage, groupID: req.params.id });
+    const [group, groupMessage] = await Promise.all([
+      GroupCollection.findOne({ _id: ID }),
+      GroupMessageCollection.find({ group: ID })
+        .populate("createdByUser")
+        .populate("group")
+        .sort({ createdDate: 1 })
+        .exec(),
+    ]);
+    res.render("components/GroupChatMessages", { messages: groupMessage, group: group, groupID: req.params.id });
   } catch (error) {
     console.log(error);
     res.send("Something went wrong getting group message");

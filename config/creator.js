@@ -30,8 +30,9 @@ const creator = () => {
 
   const useGroup = (name, createdByUser, members) => {
     // Create a new group instance
+    members = [];
+    members.push(createdByUser);
     const group = GroupCollection({ name, createdByUser, members });
-
     return group;
   };
 

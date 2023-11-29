@@ -37,11 +37,7 @@ block content
         function handleHtmxAfterSettle() {
             console.log("HTMX hello");
             
-            // Replace the console.log with your logic to push a new URL
-            //- window.location.href = "/home";
-            // Replace the current URL with "/home"
             window.history.pushState(null, null, "/home");
-
 
             // Remove the event listener after it has fired
             document.body.removeEventListener('htmx:afterSettle', handleHtmxAfterSettle);
