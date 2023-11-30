@@ -115,7 +115,7 @@ exports.groupAddMemberIDPost = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.render("components/AddMember", {
+      return res.status(422).render("components/AddMember", {
         groupID,
         username: req.body.member,
         errors: errors.array(),

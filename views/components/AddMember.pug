@@ -10,9 +10,8 @@ div#chatMessages
         div
             label(for="member") Add New Member
             br
-            input.textInput(type='text' name="member" id="member" placeholder="Type a message" value = username ? username : "")
+            input.textInput(type='text' name="member" id="member" placeholder="Type a message")
         div
             button.btn(type="Submit") Add
-            button.btn(type="button" hx-get=`/message/group/${groupID}` hx-trigger="click" hx-target="#chatSection" hx-swap="outerHTML") Cancel
 
 div.chatInputField(hx-swap-oob=true)

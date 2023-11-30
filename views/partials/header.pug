@@ -11,11 +11,11 @@ if notLoggedIn
         strong Login
 else
   header
-    a(href="/home")
+    a(href="/")
       h1.logo
         span.logoPart1 Whisper
         span.logoPart2 Wave
-    div.searchDiv(style="visibility: hidden")
+    div.searchDiv
       form(action="" method="post") 
         input(type="search" name="search" placeholder='search')
       img.searchImg(src="images/search.svg" alt='loupe icon')
