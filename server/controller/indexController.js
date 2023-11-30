@@ -24,7 +24,7 @@ exports.home = asyncHandler(async function (req, res, next) {
       .populate("friends")
       .populate("groups")
       .exec();
-    res.render("pages/home", { user: req.body.user, friendlist });
+    res.render("pages/home", { user: req.body.user, friendlist, nonce: res.locals.nonce });
   } catch (error) {
     console.log("Something went wrong with token creation", error);
     res.status(400).json({ error });
@@ -33,7 +33,7 @@ exports.home = asyncHandler(async function (req, res, next) {
 
 //! Home page
 exports.loginGet = asyncHandler(async function (req, res, next) {
-  res.render("pages/login", { title: "Log in" });
+  res.render("pages/login", { title: "Log in", nonce: res.locals.nonce });
 });
 
 //! Home page
@@ -102,7 +102,7 @@ exports.loginPost = [
         const tokenCookie = jwt.sign({ user: tokenUser }, process.env.SECRET_JWT_KEY, { expiresIn: "168h" });
         res
           .cookie("whisperwaveX", tokenCookie, { maxAge: 604800, httpOnly: true })
-          .render("pages/home", { user, friendlist });
+          .render("pages/home", { user, friendlist, nonce: res.locals.nonce });
       } catch (error) {
         console.log("Something went wrong with token creation", error);
         res.status(400).json({ error });

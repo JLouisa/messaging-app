@@ -10,7 +10,7 @@ block inner
                 each error in errors 
                     div - #{error.msg}
         div
-            form(action="", hx-post="/signup" hx-target='#loginSection' hx-swap="outerHTML")
+            form(hx-post="/signup" hx-target='#loginSection' hx-swap="outerHTML")
                 label(for="username") Username:
                 input(type="text" name="username" id="username" placeholder="username")
                 label(for="password") Password:
